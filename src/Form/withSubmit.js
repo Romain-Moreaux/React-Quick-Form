@@ -19,10 +19,10 @@ const withSubmit = (Component) => (props) => {
                 })
               })
 
-              alert(
-                'formulaire invalide',
-                'Le formulaire comporte des erreurs.'
-              )
+              // alert(
+              //   'formulaire invalide',
+              //   'Le formulaire comporte des erreurs.'
+              // )
             } else {
               callback && callback(getValues(fieldsData))
               reset && setValue()

@@ -58,8 +58,7 @@ function Password(props) {
         <a
           className={styles.link}
           onClick={(e) => {
-            // e.prevent.default()
-            return void 0
+            e.preventDefault()
           }}
           href={passwordReset.link}
         >

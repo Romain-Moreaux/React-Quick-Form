@@ -6,7 +6,7 @@ import axios from 'axios'
 const LoginForm = ({ className }) => {
   // console.log('render SignForm')
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   async function handleSubmit(fields) {
     setLoading(true)
@@ -44,7 +44,7 @@ const LoginForm = ({ className }) => {
         label="password"
         help="Veuillez saisir un password"
         passwordReset={{
-          link: '/password-reset',
+          link: '/',
           label: 'Mot de passe oublié ?',
         }}
         // type="passwordCreate"
@@ -62,8 +62,13 @@ function App() {
     <div className="App">
       <div className="container container-md">
         <div className="row">
-          <h2>My first form</h2>
-          <p>Simple login form with 2 fields</p>
+          <h2>Login Form</h2>
+          <h3>features</h3>
+          <ul>
+            <li>Show/hide chars</li>
+            <li>Custom link</li>
+            <li>Loader on submit</li>
+          </ul>
           <LoginForm className="login-form" />
         </div>
       </div>

@@ -87,6 +87,7 @@
 }
 
 .submit {
+  position: relative;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
