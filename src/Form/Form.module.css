@@ -1,0 +1,160 @@
+@value variables: "../theme.css";
+@value textMd, textSm, grayRegular, grayLight, blueDark, blueRegular, blueDeep, redRegular, greenRegular, orangeRegular,w300,w400,w600,w700,w800,w900 from variables;
+
+.group {
+  composes: flexCol from global;
+  margin-bottom: 2.2rem;
+}
+.field {
+  composes: flexRow from global;
+  position: relative;
+}
+
+.passwordEye {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 4.4rem;
+  bottom: 0;
+  background-color: transparent;
+  color: grayLight;
+  border: 0;
+  outline: 0;
+  padding: 1.4rem;
+}
+
+.passwordEye_hasToggle {
+  composes: passwordEye;
+  cursor: pointer;
+  color: blueDark;
+  border-left: 1px solid grayLight;
+}
+
+.passwordEye_hasToggle > svg,
+.passwordEye > svg {
+  width: 100%;
+}
+
+.passwordIndicatorText {
+  color: #222;
+  font-weight: w600;
+  position: absolute;
+  margin-right: 1rem;
+  right: 4.4rem;
+  bottom: 50%;
+  transform: translateY(50%);
+}
+
+.label {
+  color: blueDark;
+  margin-bottom: 0.8rem;
+  font-size: textMd;
+  font-weight: w700;
+  text-transform: capitalize;
+}
+
+.link {
+  margin-left: auto;
+  color: grayRegular;
+  text-decoration: none;
+  font-size: textSm;
+  position: absolute;
+  top: -50%;
+  right: 0;
+  transform: translateY(-0.8rem);
+}
+
+.input {
+  border: 1px solid grayLight;
+  color: blueDark;
+  background-color: #ffffff;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.error .input {
+  border-color: redRegular;
+}
+.error .help {
+  color: redRegular;
+}
+
+.success .input {
+  border-color: greenRegular;
+}
+
+.success .help {
+  color: greenRegular;
+}
+
+.submit {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: blueRegular;
+  border: 1px solid blueRegular;
+  font-size: textMd;
+  color: #ffffff;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.submit:hover {
+  background-color: blueDeep;
+}
+
+.submit:focus {
+  background-color: blueDeep;
+  box-shadow: 0 0 0 0.15rem rgba(76, 143, 233, 0.5);
+}
+
+.disabled {
+  background-color: grayLight !important;
+  border-color: grayRegular !important;
+  cursor: not-allowed;
+}
+
+.help {
+  font-size: textSm;
+  margin-top: 0.5rem;
+  color: blueDeep;
+  font-weight: w600;
+}
+
+button,
+input {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  height: 4.4rem;
+  font-size: textSm;
+  border-radius: 8px;
+  outline: none;
+}
+
+input::placeholder {
+  color: grayRegular;
+}
+
+.input:focus,
+.success .input:focus,
+.error .input:focus {
+  border-color: blueRegular;
+  box-shadow: 0 0 0 0.15rem rgba(76, 143, 233, 0.5);
+}
+
+/* Change Autocomplete styles in Chrome*/
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid transparent;
+  -webkit-text-fill-color: inherit;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+  transition: background-color 5000s ease-in-out 0s;
+} */

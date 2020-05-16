@@ -1,0 +1,50 @@
+/* colors */
+@value dark: #12263f;
+@value grayRegular: #95aac9;
+@value grayLight: #d2ddec;
+@value grayDeep: #6e84a3;
+@value blueRegular: #2c7be5;
+@value blueDeep: #1862c6;
+@value blueDark: #12263f;
+@value whiteDark: #f9fbfd;
+@value greenRegular: #00d97e;
+@value orangeRegular: #fd7e14;
+@value redRegular: #e63757;
+
+/* breakpoints */
+@value bpXs: 0;
+@value bpSm: 576px;
+@value bpMd: 768px;
+@value bpLg: 992px;
+@value bpXl: 1200px;
+
+/* font sizes */
+@value textXs: 1.1rem;
+@value textSm: 1.3rem;
+@value textMd: 1.6rem;
+@value textLg: 1.9rem;
+@value textXl: 2.3rem;
+@value textXxl: 3rem;
+@value textXxxl: 4rem;
+
+/* font families */
+@value fontPrimary: "Nunito Sans", sans-serif;
+
+/* font weights */
+@value w300: 300;
+@value w400: 400;
+@value w600: 600;
+@value w700: 700;
+@value w800: 800;
+@value w900: 900;
+
+:global .flexCol {
+  display: flex;
+  flex-direction: column;
+}
+
+:global .flexRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

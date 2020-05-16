@@ -1,0 +1,124 @@
+.loader {
+  position: relative;
+  width: 44px;
+  height: 44px;
+}
+
+@keyframes smoothfade {
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.clip-1 {
+  position: absolute;
+  width: 5px;
+  height: 15px;
+  background-color: #fff;
+  top: 20px;
+  left: 0px;
+  margin: 2px;
+  border-radius: 2px;
+  transition: all 2s ease 0s;
+  animation: smoothfade 1.2s normal 0.12s none infinite running ease-in-out;
+}
+
+.clip-2 {
+  position: absolute;
+  width: 5px;
+  height: 15px;
+  background-color: #fff;
+  top: 13.6364px;
+  left: 13.6364px;
+  transform: rotate(-45deg);
+  margin: 2px;
+  border-radius: 2px;
+  transition: all 2s ease 0s;
+  animation: smoothfade 1.2s ease-in-out 0.24s infinite normal none running;
+}
+
+.clip-3 {
+  position: absolute;
+  width: 5px;
+  height: 15px;
+  background-color: #fff;
+  top: 0px;
+  left: 20px;
+  transform: rotate(90deg);
+  margin: 2px;
+  border-radius: 2px;
+  transition: all 2s ease 0s;
+  animation: smoothfade 1.2s ease-in-out 0.36s infinite normal none running;
+}
+
+.clip-4 {
+  position: absolute;
+  width: 5px;
+  height: 15px;
+  background-color: #fff;
+  top: -13.6364px;
+  left: 13.6364px;
+  transform: rotate(45deg);
+  margin: 2px;
+  border-radius: 2px;
+  transition: all 2s ease 0s;
+  animation: smoothfade 1.2s ease-in-out 0.48s infinite normal none running;
+}
+
+.clip-5 {
+  position: absolute;
+  width: 5px;
+  height: 15px;
+  background-color: #fff;
+  top: -20px;
+  left: 0px;
+  margin: 2px;
+  border-radius: 2px;
+  transition: all 2s ease 0s;
+  animation: smoothfade 1.2s ease-in-out 0.6s infinite normal none running;
+}
+
+.clip-6 {
+  position: absolute;
+  width: 5px;
+  height: 15px;
+  background-color: #fff;
+  top: -13.6364px;
+  left: -13.6364px;
+  transform: rotate(-45deg);
+  margin: 2px;
+  border-radius: 2px;
+  transition: all 2s ease 0s;
+  animation: smoothfade 1.2s ease-in-out 0.72s infinite normal none running;
+}
+
+.clip-7 {
+  position: absolute;
+  width: 5px;
+  height: 15px;
+  background-color: #fff;
+  top: 0px;
+  left: -20px;
+  transform: rotate(90deg);
+  margin: 2px;
+  border-radius: 2px;
+  transition: all 2s ease 0s;
+  animation: smoothfade 1.2s ease-in-out 0.84s infinite normal none running;
+}
+
+.clip-8 {
+  position: absolute;
+  width: 5px;
+  height: 15px;
+  background-color: #fff;
+  top: 13.6364px;
+  left: -13.6364px;
+  transform: rotate(45deg);
+  margin: 2px;
+  border-radius: 2px;
+  transition: all 2s ease 0s;
+  animation: smoothfade 1.2s ease-in-out 0.96s infinite normal none running;
+}
