@@ -19,10 +19,15 @@ export function processField(
   value,
   required,
   options = {},
-  textLabels = {},
-  customValidationFunction
+  textLabels = {}
 ) {
-  const { type, min, forcePreviousCheck } = options
+  const {
+    model,
+    min,
+    forcePreviousCheck,
+    customValidationFunction,
+    fieldConfirm,
+  } = options
 
   // If the value is an array, remove its empty values for safety.
   const processedValue = Array.isArray(value)
@@ -59,7 +64,7 @@ export function processField(
       }
     }
     // Each case has a validation rule
-    switch (type) {
+    switch (model) {
       case 'email':
         if (!isEmail(value)) {
           validation = 'error'
@@ -79,7 +84,6 @@ export function processField(
         break
       case 'tel':
         // A améliorer
-        console.log('A améliorer')
         if (
           !value.match(
             /^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$/g
@@ -90,21 +94,32 @@ export function processField(
         }
         break
 
+      case 'confirmator':
+        if (value !== fieldConfirm.value) {
+          validation = 'error'
+          help = textLabels.fieldConfirmInvalid.replace(
+            ':field:',
+            fieldConfirm.name
+          )
+        }
+        break
       default:
-        console.log('default case, à améliorer.')
+        // A améliorer
         // Handle custom validation function.
-        if (type && customValidationFunction) {
-          const error = customValidationFunction(value, type)
+        if (model && customValidationFunction) {
+          const error = (() => {
+            console.log('customValidationFunctiont called from helpers')
+            return customValidationFunction(value, model)
+          })()
+
           if (error) {
             validation = 'error'
             help = error
-            // TODO: Multilanguage support for error message.
           }
         }
 
         // Minimal length shouldn't take precedence over main types check
         if (min && processedValue.length < min) {
-          // console.log('minLength Rule')
           validation = 'error'
           help = textLabels.minChars.replace(':length:', min)
         }
@@ -161,6 +176,8 @@ export function updateFieldsRequirements(fieldsData, required) {
  * Check whether whole form is filled correctly.
  */
 export function formIsInvalid(fieldsData, fieldKeys = []) {
+  console.log('formIsInvalid', fieldsData, fieldKeys)
+
   // Check only fields of given keys, otherwise check whole form.
   const fieldsToCheck = fieldKeys.length ? fieldKeys : Object.keys(fieldsData)
   let requiredButEmpty = false
@@ -219,7 +236,7 @@ const isEmail = (value) => {
 
 const rankPassword = (value) => {
   let upper = /[A-Z]/,
-    length = /^[\s\S]{8,12}$/,
+    length = /^[\s\S]{8,16}$/,
     lower = /[a-z]/,
     number = /[0-9]/,
     special = /[^A-Za-z0-9]/,
@@ -269,32 +286,32 @@ const rankPassword = (value) => {
 
   // Remove 1pt if there is 2 duplicate adjacent chars
   if (twoAdjacent.test(value)) {
-    console.log('2 identiques')
+    // console.log('2 identiques')
     rules.hasTwoAdjacent = true
     score--
   }
 
   // Remove 1pt if there is 3 duplicate adjacent chars
   if (threeAdjacent.test(value)) {
-    console.log('3 identiques')
+    // console.log('3 identiques')
     rules.hasThreeAdjacent = true
     score--
   }
 
   // if has required length
   if (length.test(value)) {
-    console.log('has required length')
+    // console.log('has required length')
     rules.hasRequiredLength = true
   }
 
   // add 1pt every 2 chars when min length successful
   if (value.length > minLength + 1) {
     score += Math.floor((value.length - minLength) / 2)
-    console.log('superieur', value.length, score)
+    // console.log('superieur', value.length, score)
   }
 
   if (!rules.hasRequiredLength) {
-    helpText += '8-12 characters'
+    helpText += '8-16 characters'
   }
 
   if (!rules.hasMinimumRules) {
