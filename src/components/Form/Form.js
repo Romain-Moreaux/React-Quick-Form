@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { initiateFormFields, processField } from '.'
 
@@ -13,6 +13,7 @@ const defaultHelpTexts = {
   postCodeInvalid: 'This is not a valid postal code.',
   jsonInvalid: 'Enter a valid JSON.',
   fieldValid: 'This field is valid',
+  fieldConfirmInvalid: 'This field should match with :field:',
 }
 
 const FieldsContext = React.createContext({})
@@ -67,39 +68,42 @@ function Form(props) {
     )
   }, [helpTexts])
 
-  const setValue = (name, value, options) => {
-    console.log('setValue called:', name, value, options)
-    if (!name) {
-      // If no param reset whole form
-      setFieldsData(() =>
-        forcedValidation
-          ? initiateFormFields(fields)
-          : initiateFormFields(fields, requiredFields)
-      )
-    } else {
-      setFieldsData((fieldsData) => ({
-        ...fieldsData,
-        // Destructuring assignment of the returned object
-        ...(() =>
+  const setValue = useCallback(
+    (name, value, options) => {
+      console.log('setValue called:', name, value, options)
+      if (!name) {
+        // If no param reset whole form
+        setFieldsData(() =>
           forcedValidation
-            ? {
-                [name]: {
+            ? initiateFormFields(fields)
+            : initiateFormFields(fields, requiredFields)
+        )
+      } else {
+        setFieldsData((fieldsData) => ({
+          ...fieldsData,
+          // Destructuring assignment of the returned object
+          ...(() =>
+            forcedValidation
+              ? {
+                  [name]: {
+                    value,
+                    validation: null,
+                    required: false,
+                    help: null,
+                  },
+                }
+              : processField(
+                  name,
                   value,
-                  validation: null,
-                  required: false,
-                  help: null,
-                },
-              }
-            : processField(
-                name,
-                value,
-                fieldsData[name].required,
-                options,
-                customHelpTexts
-              ))(),
-      }))
-    }
-  }
+                  fieldsData[name].required,
+                  options,
+                  customHelpTexts
+                ))(),
+        }))
+      }
+    },
+    [customHelpTexts, fields, forcedValidation, requiredFields]
+  )
 
   const Component = component
 

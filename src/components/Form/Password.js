@@ -3,26 +3,27 @@ import { withFormControl } from '.'
 import PropTypes from 'prop-types'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 import styles from './Form.module.css'
+import { concatClasses } from '../../helpers'
 
 function Password(props) {
   const {
     name,
-    type,
+    model,
     value,
     min,
     placeholder,
     setValue,
-    passwordReset,
-    toggleVisibility,
+    toggler,
     passwordStrength,
   } = props
+  console.log('password', props)
 
-  const [isShow, setIsShow] = useState(false)
+  const [isShow, setIsShow] = useState(!toggler)
 
-  //password creation
   const handleSetValue = (e) => {
-    setValue(name, e.target.value, {
-      type,
+    const { name, value } = e.target
+    setValue(name, value, {
+      model,
       min,
     })
   }
@@ -37,36 +38,25 @@ function Password(props) {
     <div className={styles.field}>
       <input
         className={styles.input}
-        type={isShow ? 'text' : type}
+        type={isShow ? 'text' : 'password'}
         name={name}
         placeholder={placeholder}
         onChange={handleSetValue}
         onBlur={handleSetValue}
         value={value}
       />
-      {toggleVisibility ? (
+      {toggler ? (
         <span
-          className={styles.passwordEye_hasToggle}
+          className={concatClasses([styles.fieldIcon, styles.fieldBtn])}
           onClick={() => setIsShow(!isShow)}
         >
           {isShow ? <FiEye /> : <FiEyeOff />}
         </span>
       ) : (
-        <span className={styles.passwordEye}>{<FiEye />}</span>
-      )}
-      {passwordReset && (
-        <a
-          className={styles.link}
-          onClick={(e) => {
-            e.preventDefault()
-          }}
-          href={passwordReset.link}
-        >
-          {passwordReset.label}
-        </a>
+        <span className={styles.fieldIcon}>{<FiEyeOff />}</span>
       )}
 
-      {type === 'passwordCreate' && (
+      {model === 'passwordCreate' && (
         <span
           style={{ color: textColor }}
           className={styles.passwordIndicatorText}
@@ -79,24 +69,19 @@ function Password(props) {
 }
 
 Password.defaultProps = {
-  type: 'password',
-  passwordReset: false,
-  toggleVisibility: true,
+  model: 'password',
+  toggler: true,
   min: 8,
 }
 
 Password.propTypes = {
   name: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['password', 'passwordCreate']),
+  model: PropTypes.oneOf(['password', 'passwordCreate']),
   value: PropTypes.any,
   placeholder: PropTypes.node,
   setValue: PropTypes.func.isRequired,
-  toggleVisibility: PropTypes.bool,
-  passwordReset: PropTypes.exact({
-    label: PropTypes.string,
-    link: PropTypes.string,
-  }),
+  toggler: PropTypes.bool,
   min: PropTypes.number,
 }
 
-export default withFormControl(Password)
+export default withFormControl(React.memo(Password))

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import withSubmit from './withSubmit'
 import DefaultButton from './DefaultButton'
-import Spinner from './Spinner'
+import { DotsLoader } from '../Spinner'
 
 /**
  * A button component to handle form actions, like submit or reset.
@@ -18,7 +18,6 @@ const FormButton = (props) => {
     submit,
     ...otherProps
   } = props
-  // console.log(props)
 
   return (
     <Component
@@ -28,7 +27,8 @@ const FormButton = (props) => {
     >
       {loading && (
         <>
-          <Spinner /> &nbsp;
+          <DotsLoader size={'sm'} />
+          &nbsp;
         </>
       )}
       {children}

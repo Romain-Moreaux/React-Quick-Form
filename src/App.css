@@ -93,6 +93,10 @@ table {
   --weight600: 600;
   --weight800: 700;
   --weight900: 900;
+  --spaceMobile: 1.2rem;
+  --spaceTablet: 2.4rem;
+  --spaceDesktop: 3.6rem;
+  --gutters: 1.2rem;
 }
 
 html {
@@ -106,7 +110,7 @@ body {
   line-height: 1.5;
   font-weight: var(--weight400);
   color: var(--gray);
-  background-color: var(--white-dark);
+  background-color: var(--whiteDark);
 }
 svg,
 img {
@@ -170,9 +174,6 @@ p {
   padding: 2rem 0;
 }
 
-.login-form {
-}
-
 /***
  TITLES */
 
@@ -205,6 +206,32 @@ p {
   color: var(--gray);
 }
 
+/* Custom Forms styles */
+.register-form,
+.login-form {
+  margin-top: 4rem;
+}
+.link-register {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.btn-primary {
+  flex: 4;
+}
+.register-form .btn-secondary {
+  background-color: #fff;
+  border-color: var(--blueRaven);
+  color: var(--blueRaven);
+  flex: 1;
+}
+
+.register-form .btn-secondary:focus,
+.register-form .btn-secondary:hover {
+  background-color: var(--gray-dark);
+  color: #ffffff;
+}
+
 @media (min-width: 576px) {
   .container-sm {
     max-width: 540px;
@@ -221,8 +248,8 @@ p {
     max-width: 83.333%;
   }
   .container {
-    padding-left: spaceTablet;
-    padding-right: spaceTablet;
+    padding-left: var(--spaceTablet);
+    padding-right: var(--spaceTablet);
   }
   .container-md {
     max-width: 720px;
@@ -241,8 +268,8 @@ p {
 
 @media (min-width: 1200px) {
   .container {
-    padding-left: spaceDesktop;
-    padding-right: spaceDesktop;
+    padding-left: var(--spaceDesktop);
+    padding-right: var(--spaceDesktop);
   }
   .container-xl {
     max-width: 1140px;

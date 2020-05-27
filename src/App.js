@@ -1,78 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './App.css'
-import Form, { Email, Password, FormButton } from './Form'
-import axios from 'axios'
-
-const LoginForm = ({ className }) => {
-  // console.log('render SignForm')
-
-  const [loading, setLoading] = useState(false)
-
-  async function handleSubmit(fields) {
-    setLoading(true)
-
-    try {
-      // Fake API login call.
-      const resp = await axios.get(
-        'https://reqres.in/api/login?delay=1',
-        fields
-      )
-      console.log(resp)
-      alert('Successfuly logged in!')
-    } catch (err) {
-      alert('There was an error during login')
-    }
-
-    setLoading(false)
-  }
-  return (
-    <Form
-      fields={['email', 'password']}
-      allRequired
-      helpTexts={{
-        formInvalid: 'Le formulaire comporte des erreurs',
-        emailInvalid: "L'adresse email n'est pas valide.",
-        passwordInvalid: "Le mot de passe n'est pas valide.",
-        fieldValid: 'Ce champ est valide.',
-        minChars: 'Ce champ doit comporter au minimum :length: caractères.',
-      }}
-      className={className}
-    >
-      <Email name="email" label="email" help="Veuillez saisir un email" />
-      <Password
-        name="password"
-        label="password"
-        help="Veuillez saisir un password"
-        passwordReset={{
-          link: '/',
-          label: 'Mot de passe oublié ?',
-        }}
-        // type="passwordCreate"
-      />
-      {/* <FormButton reset>Reset</FormButton> */}
-      <FormButton callback={(fields) => handleSubmit(fields)} loading={loading}>
-        Submit
-      </FormButton>
-    </Form>
-  )
-}
+import Toaster from './components/Toasts'
+import MyForms from './MyForms'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 function App() {
   return (
-    <div className="App">
-      <div className="container container-md">
-        <div className="row">
-          <h2>Login Form</h2>
-          <h3>features</h3>
-          <ul>
-            <li>Show/hide chars</li>
-            <li>Custom link</li>
-            <li>Loader on submit</li>
-          </ul>
-          <LoginForm className="login-form" />
-        </div>
-      </div>
-    </div>
+    <Toaster position={'topRight'} autoClose={5000} closeButton={true}>
+      <Router>
+        <MyForms />
+      </Router>
+    </Toaster>
   )
 }
 

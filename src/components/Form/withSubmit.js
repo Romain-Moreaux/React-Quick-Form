@@ -1,7 +1,9 @@
 import React from 'react'
 import { FormConsumer, getValues, formIsInvalid } from '.'
+import useToast from '../Toasts/useToast'
 
 const withSubmit = (Component) => (props) => {
+  const toast = useToast()
   return (
     <FormConsumer>
       {({ fieldsData, setValue }) => (
@@ -19,10 +21,10 @@ const withSubmit = (Component) => (props) => {
                 })
               })
 
-              // alert(
-              //   'formulaire invalide',
-              //   'Le formulaire comporte des erreurs.'
-              // )
+              toast.error(
+                'formulaire invalide',
+                'Le formulaire comporte des erreurs.'
+              )
             } else {
               callback && callback(getValues(fieldsData))
               reset && setValue()
