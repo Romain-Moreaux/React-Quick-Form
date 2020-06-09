@@ -5,7 +5,7 @@ import withFormControl from './withFormControl'
 
 const DatePicker = (props) => {
   const { name, value, min, max, model, setValue } = props
-  console.log('DatePicker', props)
+  // console.log('DatePicker', props)
 
   const handleSetValue = (e) => {
     const { name, value } = e.target

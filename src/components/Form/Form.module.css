@@ -1,6 +1,16 @@
 @value variables: "../../theme.css";
 @value textMd, textSm, grayRegular, grayLight, blueDark, blueRegular, blueDeep, redRegular, greenRegular, orangeRegular,w300,w400,w600,w700,w800,w900 from variables;
 
+input,
+select,
+textarea,
+button {
+  appearance: none;
+  outline: none;
+  border: 0;
+  background-color: transparent;
+}
+
 .group {
   margin-bottom: 2.2rem;
 }
@@ -12,28 +22,18 @@
   position: relative;
 }
 
-input::-webkit-calendar-picker-indicator,
-.fieldIcon {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 4.4rem;
-  bottom: 0;
-  background-color: transparent;
-  color: grayRegular;
-  border-left: 1px solid grayLight;
-  outline: 0;
-  padding: 1.4rem;
+.field {
+  background-color: #ffffff;
 }
 
-input::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  background-size: 16px 16px;
-  background-position: center;
-  background-image: url('./assets/calendar.svg');
+select,
+button,
+input {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  height: 4.4rem;
+  font-size: textSm;
 }
 
 .fieldBtn {
@@ -78,16 +78,47 @@ input::-webkit-calendar-picker-indicator {
 .input {
   border: 1px solid grayLight;
   color: blueDark;
-  background-color: #ffffff;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
 .error .input {
   border-color: redRegular;
 }
 
 .success .input {
   border-color: greenRegular;
+}
+
+input::placeholder {
+  color: grayRegular;
+}
+
+input::-webkit-calendar-picker-indicator,
+.fieldIcon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 4.4rem;
+  bottom: 0;
+  background-color: transparent;
+  color: grayRegular;
+  border-left: 1px solid grayLight;
+  outline: 0;
+  padding: 1.4rem;
+}
+
+input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  background-size: 16px 16px;
+  background-position: center;
+  background-image: url('./assets/calendar.svg');
+}
+
+.select {
+  z-index: 1;
+  background-color: transparent;
 }
 
 .formActions {
@@ -117,15 +148,6 @@ input::-webkit-calendar-picker-indicator {
   transition: all 0.25s ease-in-out;
 }
 
-.submit:hover {
-  background-color: blueDeep;
-}
-
-.submit:focus {
-  background-color: blueDeep;
-  box-shadow: 0 0 0 0.15rem rgba(76, 143, 233, 0.5);
-}
-
 .help {
   font-size: textSm;
   margin-top: 0.5rem;
@@ -139,20 +161,7 @@ input::-webkit-calendar-picker-indicator {
   color: greenRegular;
 }
 
-button,
-input {
-  width: 100%;
-  padding: 0.8rem 1.2rem;
-  height: 4.4rem;
-  font-size: textSm;
-  border-radius: 8px;
-  outline: none;
-}
-
-input::placeholder {
-  color: grayRegular;
-}
-
+/* States */
 .input:focus,
 .success .input:focus,
 .error .input:focus {
@@ -176,4 +185,12 @@ input::placeholder {
 .submit.disabled {
   background-color: grayLight;
   border-color: grayRegular;
+}
+.submit:hover {
+  background-color: blueDeep;
+}
+
+.submit:focus {
+  background-color: blueDeep;
+  box-shadow: 0 0 0 0.15rem rgba(76, 143, 233, 0.5);
 }
