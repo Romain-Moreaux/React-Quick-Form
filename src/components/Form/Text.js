@@ -2,47 +2,47 @@ import React from 'react'
 import { withFormControl } from '.'
 import PropTypes from 'prop-types'
 import styles from './Form.module.css'
-import { FiMail } from 'react-icons/fi'
+import { FiFileText } from 'react-icons/fi'
 import DefaultInput from './DefaultInput'
 
-function Email(props) {
+function Text(props) {
   const {
     name,
     value,
     placeholder,
+    component: Component,
     model,
     setValue,
-    component: Component,
   } = props
-  // console.log('Email', props)
+  // console.log('Text', props)
 
   return (
     <div className={styles.field}>
       <Component
+        className={styles.input}
         name={name}
-        type="email"
+        value={value}
         placeholder={placeholder}
         model={model}
         setValue={setValue}
-        value={value}
+        type="text"
       />
-      <span className={styles.fieldIcon}>{<FiMail />}</span>
+      <span className={styles.fieldIcon}>{<FiFileText />}</span>
     </div>
   )
 }
 
-Email.defaultProps = {
-  model: 'email',
-  placeholder: 'name@example.com',
+Text.defaultProps = {
   component: DefaultInput,
+  model: 'text',
 }
 
-Email.propTypes = {
+Text.propTypes = {
   name: PropTypes.string.isRequired,
-  model: PropTypes.oneOf(['email']),
+  model: PropTypes.oneOf(['text']),
   value: PropTypes.any,
   placeholder: PropTypes.node,
   setValue: PropTypes.func.isRequired,
 }
 
-export default withFormControl(React.memo(Email))
+export default withFormControl(React.memo(Text))

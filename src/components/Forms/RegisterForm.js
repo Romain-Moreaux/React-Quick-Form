@@ -10,6 +10,8 @@ import Form, {
 import { useToast } from '../Toasts'
 import Axios from 'axios'
 import { Link } from 'react-router-dom'
+import Select from '../Form/Select'
+import Text from '../Form/Text'
 
 const RegisterForm = ({ className }) => {
   const [loading, setLoading] = useState(false)
@@ -39,11 +41,19 @@ const RegisterForm = ({ className }) => {
 
   return (
     <Form
-      fields={['email', 'password', 'passwordConfirm', 'birthdate']}
+      fields={[
+        'email',
+        'text',
+        'password',
+        'passwordConfirm',
+        'birthdate',
+        'course',
+      ]}
       allRequired
       className={className}
     >
       <Email name="email" label="email" help="Please enter an email" />
+      <Text name="text" label="text" help="Please write a text" />
       <Password
         name="password"
         label="password"
@@ -64,6 +74,12 @@ const RegisterForm = ({ className }) => {
         field="birthdate"
         min="2015-01-01"
         max="2017-01-01"
+      />
+      <Select
+        name="course"
+        label="course"
+        help="select a course"
+        options={['React', 'NodeJS', 'VueJS']}
       />
       <FormActions>
         <FormButton
