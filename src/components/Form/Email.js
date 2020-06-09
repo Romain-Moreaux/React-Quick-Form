@@ -6,7 +6,7 @@ import { FiMail } from 'react-icons/fi'
 
 function Email(props) {
   const { name, value, placeholder, model, setValue } = props
-  console.log('Email', props)
+  // console.log('Email', props)
 
   const handleSetValue = (e) => {
     const { name, value } = e.target

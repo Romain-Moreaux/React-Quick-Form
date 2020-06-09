@@ -16,7 +16,7 @@ function Password(props) {
     toggler,
     passwordStrength,
   } = props
-  console.log('password', props)
+  // console.log('password', props)
 
   const [isShow, setIsShow] = useState(!toggler)
 

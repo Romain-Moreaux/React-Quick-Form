@@ -12,6 +12,7 @@
   position: relative;
 }
 
+input::-webkit-calendar-picker-indicator,
 .fieldIcon {
   position: absolute;
   right: 0;
@@ -25,13 +26,25 @@
   padding: 1.4rem;
 }
 
+input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  background-size: 16px 16px;
+  background-position: center;
+  background-image: url('./assets/calendar.svg');
+}
+
 .fieldBtn {
   cursor: pointer;
   color: blueDark;
 }
 
 .fieldIcon > svg {
-  width: 100%;
+  max-width: none;
+  width: 16px;
+  height: 16px;
 }
 
 .passwordIndicatorText {

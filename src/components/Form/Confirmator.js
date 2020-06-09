@@ -16,7 +16,7 @@ function Confirmator(props) {
     toggler,
     fieldConfirm,
   } = props
-  console.log('confirmator', props)
+  // console.log('confirmator', props)
 
   const [isShow, setIsShow] = useState(!toggler)
 

@@ -10,6 +10,7 @@ const defaultHelpTexts = {
   emailInvalid: 'This is not a valid email address.',
   urlInvalid: 'This is not a valid URL.',
   phoneInvalid: 'This is not a valid phone number.',
+  dateInvalid: 'This is not a valid date format.',
   postCodeInvalid: 'This is not a valid postal code.',
   jsonInvalid: 'Enter a valid JSON.',
   fieldValid: 'This field is valid',
