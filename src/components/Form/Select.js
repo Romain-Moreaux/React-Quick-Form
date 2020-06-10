@@ -33,7 +33,9 @@ const Select = (props) => {
           </option>
         ))}
       </select>
-      <span className={styles.fieldIcon}>{<FiChevronDown />}</span>
+      <span className={concatClasses([styles.fieldIcon, styles.fieldBtn])}>
+        {<FiChevronDown />}
+      </span>
     </div>
   )
 }

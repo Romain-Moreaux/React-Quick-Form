@@ -2,9 +2,10 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 import styles from './Form.module.css'
 import withFormControl from './withFormControl'
+import DefaultInput from './DefaultInput'
 
 const DatePicker = (props) => {
-  const { name, value, min, max, model, setValue } = props
+  const { name, value, min, max, model, setValue, component: Component } = props
   // console.log('DatePicker', props)
 
   const handleSetValue = (e) => {
@@ -14,14 +15,12 @@ const DatePicker = (props) => {
 
   return (
     <div className={styles.field}>
-      <input
-        className={styles.input}
+      <Component
         name={name}
         type="date"
         min={min}
         max={max}
-        onChange={handleSetValue}
-        onBlur={handleSetValue}
+        handleSetValue={handleSetValue}
         value={value}
       />
     </div>
@@ -30,6 +29,7 @@ const DatePicker = (props) => {
 
 DatePicker.defaultProps = {
   model: 'date',
+  component: DefaultInput,
 }
 
 DatePicker.propTypes = {
