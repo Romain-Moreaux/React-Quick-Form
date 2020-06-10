@@ -14,7 +14,12 @@ function Email(props) {
     setValue,
     component: Component,
   } = props
-  // console.log('Email', props)
+  console.log('Email', props)
+
+  const handleSetValue = (e) => {
+    const { name, value } = e.target
+    setValue(name, value, { model })
+  }
 
   return (
     <div className={styles.field}>
@@ -22,8 +27,7 @@ function Email(props) {
         name={name}
         type="email"
         placeholder={placeholder}
-        model={model}
-        setValue={setValue}
+        handleSetValue={handleSetValue}
         value={value}
       />
       <span className={styles.fieldIcon}>{<FiMail />}</span>

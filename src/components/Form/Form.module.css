@@ -36,11 +36,6 @@ input {
   font-size: textSm;
 }
 
-.fieldBtn {
-  cursor: pointer;
-  color: blueDark;
-}
-
 .fieldIcon > svg {
   max-width: none;
   width: 16px;
@@ -80,13 +75,6 @@ input {
   color: blueDark;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-.error .input {
-  border-color: redRegular;
-}
-
-.success .input {
-  border-color: greenRegular;
-}
 
 input::placeholder {
   color: grayRegular;
@@ -118,7 +106,13 @@ input::-webkit-calendar-picker-indicator {
 
 .select {
   z-index: 1;
+  cursor: pointer;
   background-color: transparent;
+}
+
+.fieldBtn {
+  cursor: pointer;
+  color: blueDark;
 }
 
 .formActions {
@@ -162,6 +156,14 @@ input::-webkit-calendar-picker-indicator {
 }
 
 /* States */
+.error .input {
+  border-color: redRegular;
+}
+
+.success .input {
+  border-color: greenRegular;
+}
+
 .input:focus,
 .success .input:focus,
 .error .input:focus {

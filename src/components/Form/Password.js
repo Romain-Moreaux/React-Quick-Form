@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 import styles from './Form.module.css'
 import { concatClasses } from '../../helpers'
+import DefaultInput from './DefaultInput'
 
 function Password(props) {
   const {
@@ -11,13 +12,15 @@ function Password(props) {
     model,
     value,
     min,
+    component: Component,
     placeholder,
     setValue,
     toggler,
     passwordStrength,
   } = props
-  // console.log('password', props)
+  console.log('password', props)
 
+  // useRef ?
   const [isShow, setIsShow] = useState(!toggler)
 
   const handleSetValue = (e) => {
@@ -36,13 +39,12 @@ function Password(props) {
 
   return (
     <div className={styles.field}>
-      <input
-        className={styles.input}
+      <Component
         type={isShow ? 'text' : 'password'}
         name={name}
+        min={min}
         placeholder={placeholder}
-        onChange={handleSetValue}
-        onBlur={handleSetValue}
+        handleSetValue={handleSetValue}
         value={value}
       />
       {toggler ? (
@@ -69,6 +71,7 @@ function Password(props) {
 }
 
 Password.defaultProps = {
+  component: DefaultInput,
   model: 'password',
   toggler: true,
   min: 8,

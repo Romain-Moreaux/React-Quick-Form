@@ -3,12 +3,7 @@ import styles from './Form.module.css'
 import { PropTypes } from 'prop-types'
 
 function DefaultInput(props) {
-  const { name, value, placeholder, type, model, setValue } = props
-
-  const handleSetValue = (e) => {
-    const { name, value } = e.target
-    setValue(name, value, { model })
-  }
+  const { name, value, placeholder, type, handleSetValue, ...rest } = props
 
   return (
     <input
@@ -19,6 +14,7 @@ function DefaultInput(props) {
       onChange={handleSetValue}
       onBlur={handleSetValue}
       value={value}
+      {...rest}
     />
   )
 }
@@ -26,15 +22,14 @@ function DefaultInput(props) {
 DefaultInput.defaultProps = {
   placeholder: 'placeholder for a text',
   type: 'text',
-  model: 'text',
 }
 
 DefaultInput.propTypes = {
   name: PropTypes.string.isRequired,
+  type: PropTypes.string,
   value: PropTypes.any,
-  model: PropTypes.string,
   placeholder: PropTypes.node,
-  setValue: PropTypes.func.isRequired,
+  handleSetValue: PropTypes.func,
 }
 
 export default DefaultInput

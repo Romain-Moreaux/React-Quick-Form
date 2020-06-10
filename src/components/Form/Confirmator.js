@@ -5,6 +5,7 @@ import { FiEye, FiEyeOff, FiRepeat } from 'react-icons/fi'
 import styles from './Form.module.css'
 import usePrevious from '../../hooks/usePrevious'
 import { concatClasses } from '../../helpers'
+import DefaultInput from './DefaultInput'
 
 function Confirmator(props) {
   const {
@@ -15,6 +16,7 @@ function Confirmator(props) {
     setValue,
     toggler,
     fieldConfirm,
+    component: Component,
   } = props
   // console.log('confirmator', props)
 
@@ -48,13 +50,11 @@ function Confirmator(props) {
 
   return (
     <div className={styles.field}>
-      <input
-        className={styles.input}
+      <Component
         type={isShow ? 'text' : 'password'}
         name={name}
         placeholder={placeholder}
-        onChange={handleSetValue}
-        onBlur={handleSetValue}
+        handleSetValue={handleSetValue}
         value={value}
       />
       {toggler ? (
@@ -74,6 +74,7 @@ function Confirmator(props) {
 Confirmator.defaultProps = {
   model: 'confirmator',
   toggler: false,
+  component: DefaultInput,
 }
 
 Confirmator.propTypes = {
