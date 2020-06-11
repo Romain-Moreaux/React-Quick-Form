@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { initiateFormFields, processField } from '.'
 
-const defaultHelpTexts = {
+const defaultValidationTexts = {
   formInvalid: 'Form contains errors. Check all fields.',
   requiredField: 'This field is required.',
   minChars: 'This field should have at least :length: characters.',
@@ -44,12 +44,13 @@ function Form(props) {
     forcedValidation,
     fields,
     required,
-    helpTexts,
+    customValidationTexts,
     className,
     component,
     children,
     ...rest
   } = props
+  console.log('form called')
 
   const requiredFields = allRequired ? fields : required
 
@@ -59,15 +60,18 @@ function Form(props) {
       : initiateFormFields(fields, requiredFields)
   })
 
-  const [customHelpTexts, setCustomHelpTexts] = useState()
+  const [validationTexts, setValidationTexts] = useState()
 
+  // Copy enumerable properties into a new object
   useEffect(() => {
-    setCustomHelpTexts(() =>
-      typeof helpTexts === 'object' && !Array.isArray(helpTexts)
-        ? Object.assign(defaultHelpTexts, helpTexts)
-        : defaultHelpTexts
-    )
-  }, [helpTexts])
+    setValidationTexts(() => {
+      console.log('setValidationTexts')
+      return typeof customValidationTexts === 'object' &&
+        !Array.isArray(customValidationTexts)
+        ? Object.assign({}, defaultValidationTexts, customValidationTexts)
+        : defaultValidationTexts
+    })
+  }, [customValidationTexts])
 
   const setValue = useCallback(
     (name, value, options) => {
@@ -98,12 +102,12 @@ function Form(props) {
                   value,
                   fieldsData[name].required,
                   options,
-                  customHelpTexts
+                  validationTexts
                 ))(),
         }))
       }
     },
-    [customHelpTexts, fields, forcedValidation, requiredFields]
+    [validationTexts, fields, forcedValidation, requiredFields]
   )
 
   const Component = component
@@ -125,7 +129,7 @@ Form.propTypes = {
   allRequired: PropTypes.bool,
   component: PropTypes.string,
   children: PropTypes.node.isRequired,
-  helpTexts: PropTypes.object,
+  customValidationTexts: PropTypes.object,
   className: PropTypes.string,
   forcedValidation: PropTypes.bool,
 }

@@ -40,15 +40,11 @@ const RegisterForm = ({ className }) => {
 
   return (
     <Form
-      fields={[
-        'email',
-        'text',
-        'password',
-        'passwordConfirm',
-        'birthdate',
-        'course',
-      ]}
+      fields={['email', 'password', 'passwordConfirm', 'birthdate', 'course']}
       allRequired
+      customValidationTexts={{
+        emailInvalid: 'test de champ validation',
+      }}
       className={className}
     >
       <Email name="email" label="email" help="Please enter an email" />
