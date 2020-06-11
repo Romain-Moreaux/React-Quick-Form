@@ -14,7 +14,7 @@ function Email(props) {
     setValue,
     component: Component,
   } = props
-  console.log('Email', props)
+  console.log('Email called')
 
   const handleSetValue = (e) => {
     const { name, value } = e.target

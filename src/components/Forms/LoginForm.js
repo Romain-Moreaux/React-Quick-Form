@@ -34,7 +34,7 @@ const LogInForm = ({ className }) => {
     <Form
       fields={['email', 'password']}
       allRequired
-      helpTexts={{
+      customValidationTexts={{
         formInvalid: 'Le formulaire comporte des erreurs',
         emailInvalid: "L'adresse email n'est pas valide.",
         passwordInvalid: "Le mot de passe n'est pas valide.",

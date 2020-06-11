@@ -30,6 +30,8 @@ const withFormControl = (InputComponent) => {
         help: fieldsDataHelp,
       } = fieldsData[name]
 
+      // console.log('controlledChild', help)
+
       const inputProps = {
         name,
         label,
@@ -45,7 +47,6 @@ const withFormControl = (InputComponent) => {
               value: fieldsData[field].value,
             },
           })(),
-
         ...otherProps,
       }
 

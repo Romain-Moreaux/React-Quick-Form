@@ -19,7 +19,7 @@ export function processField(
   value,
   required,
   options = {},
-  textLabels = {}
+  validationTexts = {}
 ) {
   const {
     model,
@@ -28,6 +28,7 @@ export function processField(
     customValidationFunction,
     fieldConfirm,
   } = options
+  console.log('processField', validationTexts)
 
   // If the value is an array, remove its empty values for safety.
   const processedValue = Array.isArray(value)
@@ -45,7 +46,7 @@ export function processField(
   if (required && (!processedValue || processedValue.length === 0)) {
     // If the field is required and its value is empty, set an error.
     validation = 'error'
-    help = textLabels.requiredField
+    help = validationTexts.requiredField
   } else if (processedValue && processedValue.length > 0) {
     // If forcePreviousCheck is present, skip further validation.
     if (
@@ -68,7 +69,7 @@ export function processField(
       case 'email':
         if (!isEmail(value)) {
           validation = 'error'
-          help = textLabels.emailInvalid
+          help = validationTexts.emailInvalid
         }
         break
       case 'passwordCreate':
@@ -80,7 +81,6 @@ export function processField(
           validation = 'error'
           help = helpText
         }
-
         break
       case 'tel':
         // A améliorer
@@ -90,14 +90,14 @@ export function processField(
           )
         ) {
           validation = 'error'
-          help = textLabels.phoneInvalid
+          help = validationTexts.phoneInvalid
         }
         break
 
       case 'confirmator':
         if (value !== fieldConfirm.value) {
           validation = 'error'
-          help = textLabels.fieldConfirmInvalid.replace(
+          help = validationTexts.fieldConfirmInvalid.replace(
             ':field:',
             fieldConfirm.name
           )
@@ -121,7 +121,7 @@ export function processField(
         // Minimal length shouldn't take precedence over main types check
         if (min && processedValue.length < min) {
           validation = 'error'
-          help = textLabels.minChars.replace(':length:', min)
+          help = validationTexts.minChars.replace(':length:', min)
         }
         break
     }
@@ -134,7 +134,7 @@ export function processField(
       (typeof value === 'object' && !Array.isArray(value)))
   ) {
     validation = 'success'
-    help = textLabels.fieldValid
+    help = validationTexts.fieldValid
   }
 
   return {
@@ -177,7 +177,6 @@ export function updateFieldsRequirements(fieldsData, required) {
  */
 export function formIsInvalid(fieldsData, fieldKeys = []) {
   console.log('formIsInvalid', fieldsData, fieldKeys)
-
   // Check only fields of given keys, otherwise check whole form.
   const fieldsToCheck = fieldKeys.length ? fieldKeys : Object.keys(fieldsData)
   let requiredButEmpty = false
@@ -195,7 +194,6 @@ export function formIsInvalid(fieldsData, fieldKeys = []) {
           (value === null || !Object.keys(value).length)))
     ) {
       console.log('required but empty')
-
       requiredButEmpty = true
     }
     if (validation === 'error') {
