@@ -11,6 +11,7 @@ button {
   background-color: transparent;
 }
 
+.formGroup,
 .group {
   margin-bottom: 2.2rem;
 }
@@ -21,9 +22,23 @@ button {
   flex-direction: column;
   position: relative;
 }
-
 .field {
   background-color: #ffffff;
+}
+
+.formGroup {
+  border: 1px solid grayLight;
+  border-radius: 8px;
+  padding: 1.4rem 1rem;
+}
+
+.formGroup > .group {
+  margin: 0;
+  padding: 0 1rem;
+}
+
+.legend {
+  padding: 0 1rem;
 }
 
 select,
@@ -52,6 +67,7 @@ input {
   transform: translateY(50%);
 }
 
+.legend,
 .label {
   color: blueDark;
   margin-bottom: 0.8rem;

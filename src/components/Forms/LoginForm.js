@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import { useToast } from '../Toasts'
 import Axios from 'axios'
-import Form, { Email, Password, FormButton, FormActions } from '../Form'
+import Form, {
+  Email,
+  Password,
+  FormButton,
+  FormActions,
+  FormGroup,
+} from '../Form'
 import { Link } from 'react-router-dom'
 
 const LogInForm = ({ className }) => {
@@ -32,7 +38,7 @@ const LogInForm = ({ className }) => {
 
   return (
     <Form
-      fields={['email', 'password']}
+      fields={['enfant']}
       allRequired
       customValidationTexts={{
         formInvalid: 'Le formulaire comporte des erreurs',
@@ -43,16 +49,14 @@ const LogInForm = ({ className }) => {
       }}
       className={className}
     >
-      <Email name="email" label="email" help="Veuillez saisir un email" />
-      <Password
-        name="password"
-        label="password"
-        help="Veuillez saisir un password"
-        addLink={{
-          link: '/password-reset',
-          label: 'Mot de passe oublié ?',
-        }}
-      />
+      <FormGroup fields={['email', 'password']} name="enfant">
+        <Email name="email" label="email" help="Veuillez saisir un email" />
+        <Password
+          name="password"
+          label="password"
+          help="Veuillez saisir un password"
+        />
+      </FormGroup>
       <FormActions>
         <FormButton
           callback={(fields) => handleSubmit(fields)}

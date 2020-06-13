@@ -11,6 +11,7 @@ function Password(props) {
     name,
     model,
     value,
+    handleSetProperty,
     min,
     component: Component,
     placeholder,
@@ -18,13 +19,18 @@ function Password(props) {
     toggler,
     passwordStrength,
   } = props
-  console.log('password called')
+  // console.log('password called')
 
   // useRef ?
   const [isShow, setIsShow] = useState(!toggler)
 
   const handleSetValue = (e) => {
     const { name, value } = e.target
+    console.log('password')
+    if (handleSetProperty) {
+      console.log('setValues from password')
+      handleSetProperty(name, value)
+    }
     setValue(name, value, {
       model,
       min,

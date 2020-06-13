@@ -42,6 +42,7 @@ function Form(props) {
   const {
     allRequired,
     forcedValidation,
+    isFormGroup,
     fields,
     required,
     customValidationTexts,
@@ -50,7 +51,7 @@ function Form(props) {
     children,
     ...rest
   } = props
-  console.log('form called')
+  // console.log('form called', props)
 
   const requiredFields = allRequired ? fields : required
 
@@ -65,7 +66,7 @@ function Form(props) {
   // Copy enumerable properties into a new object
   useEffect(() => {
     setValidationTexts(() => {
-      console.log('setValidationTexts')
+      // console.log('setValidationTexts')
       return typeof customValidationTexts === 'object' &&
         !Array.isArray(customValidationTexts)
         ? Object.assign({}, defaultValidationTexts, customValidationTexts)
@@ -110,7 +111,7 @@ function Form(props) {
     [validationTexts, fields, forcedValidation, requiredFields]
   )
 
-  const Component = component
+  const Component = isFormGroup ? 'fieldset' : component
 
   return (
     <Component className={className} {...rest}>

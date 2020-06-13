@@ -12,12 +12,17 @@ function Email(props) {
     placeholder,
     model,
     setValue,
+    handleSetProperty,
     component: Component,
   } = props
-  console.log('Email called')
+  // console.log('Email called')
 
   const handleSetValue = (e) => {
     const { name, value } = e.target
+    if (handleSetProperty) {
+      console.log('setValues from email')
+      handleSetProperty(name, value)
+    }
     setValue(name, value, { model })
   }
 

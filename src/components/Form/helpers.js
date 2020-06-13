@@ -28,7 +28,7 @@ export function processField(
     customValidationFunction,
     fieldConfirm,
   } = options
-  console.log('processField', validationTexts)
+  // console.log('processField', validationTexts)
 
   // If the value is an array, remove its empty values for safety.
   const processedValue = Array.isArray(value)
