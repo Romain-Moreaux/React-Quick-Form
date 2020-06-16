@@ -11,7 +11,7 @@ function Password(props) {
     name,
     model,
     value,
-    handleSetProperty,
+    // handleSetProperty,
     min,
     component: Component,
     placeholder,
@@ -26,11 +26,10 @@ function Password(props) {
 
   const handleSetValue = (e) => {
     const { name, value } = e.target
-    console.log('password')
-    if (handleSetProperty) {
-      console.log('setValues from password')
-      handleSetProperty(name, value)
-    }
+    // if (handleSetProperty) {
+    //   console.log('setValues from password')
+    //   handleSetProperty(name, value)
+    // }
     setValue(name, value, {
       model,
       min,

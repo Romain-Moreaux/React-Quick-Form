@@ -28,7 +28,7 @@ export function processField(
     customValidationFunction,
     fieldConfirm,
   } = options
-  // console.log('processField', validationTexts)
+  console.log('processField', model)
 
   // If the value is an array, remove its empty values for safety.
   const processedValue = Array.isArray(value)
@@ -41,6 +41,8 @@ export function processField(
   let validation = null,
     passwordStrength = null,
     help = null
+
+  console.log('processedValue', processedValue, model)
 
   // VALIDATION - If any check will fail, raise error state and set help message.
   if (required && (!processedValue || processedValue.length === 0)) {
@@ -66,6 +68,16 @@ export function processField(
     }
     // Each case has a validation rule
     switch (model) {
+      case 'formGroup':
+        console.log('case formGroup')
+        return {
+          [name]: {
+            value: processedValue,
+            validation: null,
+            required,
+            help: null,
+          },
+        }
       case 'email':
         if (!isEmail(value)) {
           validation = 'error'

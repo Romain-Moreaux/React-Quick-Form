@@ -17,7 +17,7 @@ const defaultValidationTexts = {
   fieldConfirmInvalid: 'This field should match with :field:',
 }
 
-const FieldsContext = React.createContext({})
+export const FieldsContext = React.createContext({})
 const SetValueContext = React.createContext(() => {})
 
 // Return the returned element from fn(children) wrapped with contexts
