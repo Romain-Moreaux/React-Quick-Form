@@ -3,18 +3,10 @@ import { createPortal } from 'react-dom'
 import ToastContext from './context'
 import Toast from './Toast'
 import styles from './Toaster.module.css'
-import { concatClasses } from '../../helpers'
+import { concatClasses, newId } from '../../helpers'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 const Toaster = (props) => {
-  /**
-   * Generate a random toastId
-   */
-  function generateToastId() {
-    // console.log('generateToastID called')
-    return (Math.random().toString(36) + Date.now().toString(36)).substr(2, 10)
-  }
-
   const [toasts, setToasts] = useState([])
   let transitionsCls = useRef()
   const toastsRoot = document.getElementById('toasts')
@@ -39,7 +31,7 @@ const Toaster = (props) => {
         title,
         message,
         type,
-        id: generateToastId(),
+        id: newId(),
       }
     }
   }

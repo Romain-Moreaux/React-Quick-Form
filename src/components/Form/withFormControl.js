@@ -50,7 +50,7 @@ const withFormControl = (InputComponent) => {
 
       return (
         <div className={concatClasses([styles.group, styles[validation]])}>
-          {label ? (
+          {!props.fields && label ? (
             <label className={styles.label} htmlFor={name}>
               {label}
             </label>

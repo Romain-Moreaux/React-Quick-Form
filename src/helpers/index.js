@@ -41,3 +41,9 @@ export const hexToRgb = (hex) => {
 */
 export const rgbToHex = (r, g, b) =>
   '#' + [r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('')
+
+/**
+ * Generate a uniq random Id
+ */
+export const newId = () =>
+  (Math.random().toString(36) + Date.now().toString(36)).substr(2, 10)

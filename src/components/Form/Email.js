@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import styles from './Form.module.css'
 import { FiMail } from 'react-icons/fi'
 import DefaultInput from './DefaultInput'
+// import { FieldsContext } from './Form'
 
 function Email(props) {
   const {
@@ -13,14 +14,18 @@ function Email(props) {
     model,
     setValue,
     component: Component,
-    handleValidation,
+    // handleValidation,
   } = props
-  console.log('Email called', props)
+
+  // console.log('email called', props)
+
+  // const context = useContext(FieldsContext)
 
   const handleSetValue = (e) => {
     const { name, value } = e.target
     e.preventDefault()
     setValue(name, value, { model })
+    // handleValidation && handleValidation(context)
   }
 
   return (

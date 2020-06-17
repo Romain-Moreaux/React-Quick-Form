@@ -12,6 +12,7 @@ const withSubmit = (Component) => (props) => {
           submit={(e, callback, reset) => {
             e.preventDefault()
             if (callback && formIsInvalid(fieldsData)) {
+              console.log('formIsInvalid')
               // Trigger validation check of all fields.
               Object.entries(fieldsData).forEach(([key, data]) => {
                 const { value, validation, help } = data

@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { withFormControl } from '.'
 import PropTypes from 'prop-types'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 import styles from './Form.module.css'
 import { concatClasses } from '../../helpers'
 import DefaultInput from './DefaultInput'
+import { FieldsContext } from './Form'
 
 function Password(props) {
   const {
@@ -18,22 +19,21 @@ function Password(props) {
     setValue,
     toggler,
     passwordStrength,
+    handleValidation,
   } = props
   // console.log('password called')
 
-  // useRef ?
+  const context = useContext(FieldsContext)
+
   const [isShow, setIsShow] = useState(!toggler)
 
   const handleSetValue = (e) => {
     const { name, value } = e.target
-    // if (handleSetProperty) {
-    //   console.log('setValues from password')
-    //   handleSetProperty(name, value)
-    // }
     setValue(name, value, {
       model,
       min,
     })
+    handleValidation && handleValidation(context)
   }
 
   let textColor =

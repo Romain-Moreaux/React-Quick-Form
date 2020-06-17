@@ -51,8 +51,10 @@ const LogInForm = ({ className }) => {
     >
       <FormGroup
         fields={['email', 'password']}
+        required={['email', 'password']}
         name="enfants"
-        groupLabel="enfant"
+        label="enfant"
+        moreLabel="Ajouter un enfant"
       >
         <Email name="email" label="email" help="Veuillez saisir un email" />
         <Password

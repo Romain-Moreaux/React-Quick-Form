@@ -1,23 +1,24 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import withFormControl from './withFormControl'
 import styles from './Form.module.css'
 import Form from './Form'
 import { formIsInvalid } from './helpers'
+import { newId } from '../../helpers'
+import DefaultButton from './DefaultButton'
+import { FiX } from 'react-icons/fi'
 
 const initialState = []
+
 const reducer = (state, action) => {
   switch (action.type) {
     case 'add':
-      console.log('add', action)
       return [...state, action.payload.item]
 
     case 'delete':
-      console.log('delete', action.payload.id)
       return state.filter((item) => item.id !== action.payload.id)
 
     case 'onchange':
-      console.log('onchange', action.payload.id, action.payload.target)
       return state.map((item) => {
         if (item.id === action.payload.id) {
           item[action.payload.target.name] = action.payload.target.value
@@ -29,43 +30,40 @@ const reducer = (state, action) => {
       return state
   }
 }
+
 function FormGroup(props) {
   const {
     name,
     children,
     fields,
-    component: Component,
+    formComponent: Form,
+    buttonComponent: Button,
+    moreLabel,
     setValue,
     model,
-    groupLabel,
+    label,
+    ...restProps
   } = props
-  console.log('FormGroup called', props)
+  // console.log('formgroup called', props)
 
   const [items, dispatch] = useReducer(reducer, initialState)
+  const [formIsValid, setFormIsValid] = useState()
 
-  const createItem = () => {
+  const newItem = useCallback(() => {
+    console.log('newItem called')
     let item = {}
+    let valueUndefined
     Object.values(fields).forEach((name) => {
-      item[name] = undefined
+      item[name] = valueUndefined
     })
-    item.id = generateItemId()
-    return item
-  }
+    item.id = newId()
+    return { item }
+  }, [fields])
 
-  useEffect(() => {
-    const runOnInitialLoad = () => {
-      console.log('runOnInitialLoad')
-      dispatch({
-        type: 'add',
-        payload: { item: createItem(fields) },
-      })
-    }
-    runOnInitialLoad()
-  }, [])
-
-  function generateItemId() {
-    return (Math.random().toString(36) + Date.now().toString(36)).substr(2, 10)
-  }
+  const onUpdate = useCallback(() => {
+    console.log('onUpdate called')
+    setValue(name, items, { model })
+  }, [items, model, name, setValue])
 
   const handleDispatch = (e, action) => {
     e.preventDefault()
@@ -73,15 +71,31 @@ function FormGroup(props) {
   }
 
   const handleValidation = (fields) => {
-    return formIsInvalid(fields)
+    setFormIsValid(!formIsInvalid(fields))
   }
 
+  useEffect(() => {
+    const onInitialLoad = () => {
+      console.log('onInitialLoad called')
+      dispatch({
+        type: 'add',
+        payload: newItem(fields),
+      })
+    }
+    onInitialLoad()
+  }, [newItem, fields])
+
+  useEffect(() => {
+    onUpdate()
+  }, [items, onUpdate])
+
   return (
-    <div>
-      {items.map((item) => {
+    <>
+      {items.map((item, index) => {
         return (
-          <Component
+          <Form
             fields={fields}
+            {...restProps}
             key={item.id}
             isFormGroup
             className={styles.formGroup}
@@ -90,52 +104,67 @@ function FormGroup(props) {
                 type: 'onchange',
                 payload: { id: item.id, target: e.target },
               })
-              setValue(name, items, { model })
             }}
           >
-            <legend className={styles.legend}>{groupLabel}</legend>
-
-            {/* {children} */}
-            {React.Children.map(children, (children, index) => {
+            <legend className={styles.legend}>{label}</legend>
+            {React.Children.map(children, (children) => {
               return React.cloneElement(
                 children,
                 { handleValidation },
                 { ...children }
               )
             })}
-            <button
-              onClick={(e) =>
-                handleDispatch(e, { type: 'delete', payload: { id: item.id } })
-              }
-            >
-              Delete
-            </button>
-          </Component>
+            {index !== 0 ? (
+              <Button
+                css={`
+                  ${styles.btnRemove} ${styles.btnAction}
+                `}
+                onClick={(e) =>
+                  handleDispatch(e, {
+                    type: 'delete',
+                    payload: { id: item.id },
+                  })
+                }
+              >
+                <FiX />
+              </Button>
+            ) : null}
+          </Form>
         )
       })}
-      <button
+      <Button
+        css={`
+          ${styles.btnAction} ${styles.btnAdd}
+        `}
         onClick={(e) =>
           handleDispatch(e, {
             type: 'add',
-            payload: { item: createItem(fields) },
+            payload: newItem(fields),
           })
         }
       >
-        Add
-      </button>
-    </div>
+        {moreLabel}
+      </Button>
+    </>
   )
 }
 
 FormGroup.defaultProps = {
   model: 'formGroup',
-  component: Form,
+  moreLabel: 'Add',
+  formComponent: Form,
+  buttonComponent: DefaultButton,
 }
 FormGroup.propTypes = {
   name: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  moreLabel: PropTypes.string,
   model: PropTypes.oneOf(['formGroup']),
   value: PropTypes.any,
   setValue: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+  buttonComponent: PropTypes.elementType,
+  formComponent: PropTypes.elementType,
 }
 
 export default withFormControl(FormGroup)
