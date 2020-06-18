@@ -9,6 +9,7 @@ const defaultValidationTexts = {
   passwordInvalid: "Password isn't strong enough.",
   emailInvalid: 'This is not a valid email address.',
   urlInvalid: 'This is not a valid URL.',
+  groupInvalid: 'This group contains errors.',
   phoneInvalid: 'This is not a valid phone number.',
   dateInvalid: 'This is not a valid date format.',
   postCodeInvalid: 'This is not a valid postal code.',
@@ -42,7 +43,6 @@ function Form(props) {
   const {
     allRequired,
     forcedValidation,
-    isFormGroup,
     fields,
     required,
     customValidationTexts,
@@ -66,7 +66,6 @@ function Form(props) {
   // Copy enumerable properties into a new object
   useEffect(() => {
     setValidationTexts(() => {
-      // console.log('setValidationTexts')
       return typeof customValidationTexts === 'object' &&
         !Array.isArray(customValidationTexts)
         ? Object.assign({}, defaultValidationTexts, customValidationTexts)
@@ -111,7 +110,7 @@ function Form(props) {
     [validationTexts, fields, forcedValidation, requiredFields]
   )
 
-  const Component = isFormGroup ? 'fieldset' : component
+  const Component = component
 
   return (
     <Component className={className} {...rest}>

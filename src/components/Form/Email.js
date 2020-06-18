@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useContext, useEffect, useRef, useCallback } from 'react'
 import { withFormControl } from '.'
 import PropTypes from 'prop-types'
 import styles from './Form.module.css'
 import { FiMail } from 'react-icons/fi'
 import DefaultInput from './DefaultInput'
-// import { FieldsContext } from './Form'
+import { FieldsContext } from './Form'
 
 function Email(props) {
   const {
@@ -14,19 +14,40 @@ function Email(props) {
     model,
     setValue,
     component: Component,
-    // handleValidation,
+    handleUpdate,
   } = props
 
   // console.log('email called', props)
+  let isInitialised = useRef()
+  const fieldsData = useContext(FieldsContext)
 
-  // const context = useContext(FieldsContext)
+  // const handleSetValue = useCallback(
+  //   (e) => {
+  //     console.log('handle setValue', e.target)
+
+  //     const { name, value } = e.target
+  //     e.preventDefault()
+  //     setValue(name, value, { model })
+  //     handleUpdate && handleUpdate(fieldsData, setValue)
+  //   },
+  //   [model, setValue, handleUpdate, fieldsData]
+  // )
 
   const handleSetValue = (e) => {
+    console.log('handle setValue', e.target)
     const { name, value } = e.target
     e.preventDefault()
     setValue(name, value, { model })
-    // handleValidation && handleValidation(context)
+    handleUpdate && handleUpdate(fieldsData, setValue)
   }
+
+  // useEffect(() => {
+  //   if (isInitialised.current) {
+  //     console.log('useEffect Called Email')
+  //     handleUpdate && handleUpdate(fieldsData, setValue)
+  //   }
+  //   isInitialised.current = true
+  // }, [fieldsData, handleUpdate, setValue])
 
   return (
     <div className={styles.field}>

@@ -1,10 +1,9 @@
-import React, { useEffect, useReducer, useState, useCallback } from 'react'
+import React, { useEffect, useReducer, useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
 import withFormControl from './withFormControl'
 import styles from './Form.module.css'
 import Form from './Form'
-import { formIsInvalid } from './helpers'
-import { newId } from '../../helpers'
+import { newId, concatClasses } from '../../helpers'
 import DefaultButton from './DefaultButton'
 import { FiX } from 'react-icons/fi'
 
@@ -36,18 +35,21 @@ function FormGroup(props) {
     name,
     children,
     fields,
+    css,
     formComponent: Form,
     buttonComponent: Button,
     moreLabel,
     setValue,
     model,
     label,
+    helptext,
     ...restProps
   } = props
-  // console.log('formgroup called', props)
+  console.log('formgroup called', props)
+
+  let isInitialised = useRef()
 
   const [items, dispatch] = useReducer(reducer, initialState)
-  const [formIsValid, setFormIsValid] = useState()
 
   const newItem = useCallback(() => {
     console.log('newItem called')
@@ -60,20 +62,24 @@ function FormGroup(props) {
     return { item }
   }, [fields])
 
-  const onUpdate = useCallback(() => {
-    console.log('onUpdate called')
-    setValue(name, items, { model })
-  }, [items, model, name, setValue])
+  const handleUpdate = (fieldsData) => {
+    console.log('handleUpdate called')
+    setValue(name, items, { model, fieldsData })
+  }
+  // const handleUpdate = useCallback(
+  //   (fieldsData) => {
+  //     console.log('handleUpdate called')
+  //     setValue(name, items, { model, fieldsData })
+  //   },
+  //   [items, model, name, setValue]
+  // )
 
   const handleDispatch = (e, action) => {
     e.preventDefault()
     dispatch(action)
   }
 
-  const handleValidation = (fields) => {
-    setFormIsValid(!formIsInvalid(fields))
-  }
-
+  // Add 1 item at the first render only
   useEffect(() => {
     const onInitialLoad = () => {
       console.log('onInitialLoad called')
@@ -81,24 +87,23 @@ function FormGroup(props) {
         type: 'add',
         payload: newItem(fields),
       })
+      return true
     }
-    onInitialLoad()
+    if (!isInitialised.current) {
+      isInitialised.current = onInitialLoad()
+    }
   }, [newItem, fields])
 
-  useEffect(() => {
-    onUpdate()
-  }, [items, onUpdate])
-
   return (
-    <>
+    <div className={styles.formGroup}>
       {items.map((item, index) => {
         return (
           <Form
             fields={fields}
             {...restProps}
             key={item.id}
-            isFormGroup
-            className={styles.formGroup}
+            component="fieldset"
+            className={concatClasses([styles.fieldset, css])}
             onChange={(e) => {
               handleDispatch(e, {
                 type: 'onchange',
@@ -110,7 +115,7 @@ function FormGroup(props) {
             {React.Children.map(children, (children) => {
               return React.cloneElement(
                 children,
-                { handleValidation },
+                { handleUpdate },
                 { ...children }
               )
             })}
@@ -129,6 +134,7 @@ function FormGroup(props) {
                 <FiX />
               </Button>
             ) : null}
+            {helptext && <span className={styles.help}>{helptext}</span>}
           </Form>
         )
       })}
@@ -145,7 +151,7 @@ function FormGroup(props) {
       >
         {moreLabel}
       </Button>
-    </>
+    </div>
   )
 }
 

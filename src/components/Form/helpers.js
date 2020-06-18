@@ -27,7 +27,9 @@ export function processField(
     forcePreviousCheck,
     customValidationFunction,
     fieldConfirm,
+    fieldsData,
   } = options
+  console.log('processField called')
 
   // If the value is an array, remove its empty values for safety.
   const processedValue = Array.isArray(value)
@@ -65,16 +67,13 @@ export function processField(
     }
     // Each case has a validation rule
     switch (model) {
-      // case 'formGroup':
-      //   console.log('case formGroup')
-      //   return {
-      //     [name]: {
-      //       value: processedValue,
-      //       validation: null,
-      //       required,
-      //       help: null,
-      //     },
-      //   }
+      case 'formGroup':
+        console.log('CASE formGroup', fieldsData, value)
+        if (formIsInvalid(fieldsData)) {
+          validation = 'error'
+          help = validationTexts.groupInvalid
+        }
+        break
       case 'email':
         if (!isEmail(value)) {
           validation = 'error'
@@ -142,6 +141,8 @@ export function processField(
     ((processedValue && processedValue.length > 0) ||
       (typeof value === 'object' && !Array.isArray(value)))
   ) {
+    console.log('pas d"erreur')
+
     validation = 'success'
     help = validationTexts.fieldValid
   }

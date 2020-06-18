@@ -12,10 +12,12 @@ button {
 }
 
 .formGroup,
+.fieldset,
 .group {
   margin-bottom: 2.2rem;
 }
 
+.fieldset,
 .group,
 .field {
   display: flex;
@@ -25,15 +27,18 @@ button {
 .field {
   background-color: #ffffff;
 }
-
 .formGroup {
+  position: relative;
+}
+
+.fieldset {
   border: 1px solid grayLight;
   border-radius: 8px;
   padding: 1.4rem 1rem;
   position: relative;
 }
 
-.formGroup > .group {
+.fieldset > .group {
   margin: 0;
   padding: 0 1rem;
 }
@@ -156,8 +161,8 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .btnPrimary {
-  background-color: blueRegular;
-  border: 1px solid blueRegular;
+  background-color: blueDeep;
+  border: 1px solid blueDeep;
   font-size: textMd;
   color: #ffffff;
 }
@@ -170,10 +175,10 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .btnAction {
-  background-color: grayDeep;
-  border: 1px solid grayDeep;
+  background-color: #fff;
+  border: 1px solid blueDark;
   font-size: textMd;
-  color: #ffffff;
+  color: blueDark;
 }
 
 .btnRemove {
@@ -191,16 +196,16 @@ input::-webkit-calendar-picker-indicator {
   max-width: fit-content;
   margin-left: auto;
   font-size: textSm;
-  position: absolute;
+  /* position: absolute;
   bottom: -0.6rem;
-  right: 0;
+  right: 0; */
 }
 
 .help {
   font-size: textSm;
   margin-top: 0.5rem;
   color: blueDeep;
-  font-weight: w600;
+  font-weight: w400;
 }
 .error .help {
   color: redRegular;

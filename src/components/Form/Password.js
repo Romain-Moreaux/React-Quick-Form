@@ -1,4 +1,10 @@
-import React, { useState, useContext } from 'react'
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react'
 import { withFormControl } from '.'
 import PropTypes from 'prop-types'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
@@ -12,18 +18,17 @@ function Password(props) {
     name,
     model,
     value,
-    // handleSetProperty,
+    handleUpdate,
     min,
     component: Component,
     placeholder,
     setValue,
     toggler,
     passwordStrength,
-    handleValidation,
   } = props
   // console.log('password called')
-
-  const context = useContext(FieldsContext)
+  let isInitialised = useRef()
+  const fieldsData = useContext(FieldsContext)
 
   const [isShow, setIsShow] = useState(!toggler)
 
@@ -33,8 +38,27 @@ function Password(props) {
       model,
       min,
     })
-    handleValidation && handleValidation(context)
+    handleUpdate && handleUpdate(fieldsData, setValue)
   }
+  // const handleSetValue = useCallback(
+  //   (e) => {
+  //     const { name, value } = e.target
+  //     setValue(name, value, {
+  //       model,
+  //       min,
+  //     })
+  //     handleUpdate && handleUpdate(fieldsData, setValue)
+  //   },
+  //   [min, model, setValue, fieldsData, handleUpdate]
+  // )
+
+  // useEffect(() => {
+  //   if (isInitialised.current) {
+  //     console.log('useEffect Called Password')
+  //     handleUpdate && handleUpdate(fieldsData, setValue)
+  //   }
+  //   isInitialised.current = true
+  // }, [fieldsData, handleUpdate, setValue])
 
   let textColor =
     (passwordStrength === 'weak' && '#FF4136') ||
