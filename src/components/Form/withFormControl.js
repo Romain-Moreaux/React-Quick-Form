@@ -18,7 +18,7 @@ const withFormControl = (WrappedComponent) => {
       addLink,
       ...otherProps
     } = props
-    console.log('FormControl', props)
+    // console.log('FormControl', props)
 
     /* Get past contexts as parameters and return a React element */
     function controlledChild({ fieldsData, setValue }) {
@@ -55,6 +55,7 @@ const withFormControl = (WrappedComponent) => {
         model,
         setValue,
         helptext: fieldsDataHelp || help,
+        fieldsData,
         ...otherProps,
       }
 

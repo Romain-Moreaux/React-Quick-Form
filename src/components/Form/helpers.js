@@ -1,17 +1,35 @@
 export function initiateFormFields(fieldNames = [], required = []) {
+  console.log('initiateFormFields', fieldNames, required)
+
   let valueUndefined
-  return fieldNames.reduce(
-    (acc, field) => ({
-      ...acc,
-      [field]: {
-        value: valueUndefined,
-        validation: null,
-        required: required.includes(field),
-        help: null,
-      },
-    }),
-    {}
-  )
+  return fieldNames.reduce((acc, field) => {
+    let newfield
+    if (typeof field === 'string') {
+      newfield = {
+        ...acc,
+        [field]: {
+          value: valueUndefined,
+          validation: null,
+          required: required.includes(field),
+          help: null,
+        },
+      }
+    } else if (Array.isArray(field) && field.length === 1) {
+      newfield = {
+        ...acc,
+        [field[0]]: [
+          {
+            value: {},
+            validation: null,
+            required: required.includes(field[0]),
+            help: null,
+          },
+        ],
+      }
+    }
+    // console.log('reduce', newfield)
+    return newfield
+  }, {})
 }
 
 export function processField(
@@ -27,12 +45,12 @@ export function processField(
     forcePreviousCheck,
     customValidationFunction,
     fieldConfirm,
-    fieldsData,
+    context,
   } = options
-  console.log('processField called')
+  console.log('processField called', name, value, required, options)
 
   // If the value is an array, remove its empty values for safety.
-  const processedValue = Array.isArray(value)
+  let processedValue = Array.isArray(value)
     ? value.filter(
         (item) =>
           Number.isInteger(item) || item instanceof Object || item.length
@@ -45,6 +63,8 @@ export function processField(
 
   // VALIDATION - If any check will fail, raise error state and set help message.
   if (required && (!processedValue || processedValue.length === 0)) {
+    console.log('if error')
+
     // If the field is required and its value is empty, set an error.
     validation = 'error'
     help = validationTexts.requiredField
@@ -68,14 +88,20 @@ export function processField(
     // Each case has a validation rule
     switch (model) {
       case 'formGroup':
-        console.log('CASE formGroup', fieldsData, value)
-        if (formIsInvalid(fieldsData)) {
+        console.log(
+          'CASE formGroup',
+          'processedValue:',
+          processedValue,
+          'context',
+          context
+        )
+        if (formIsInvalid(context)) {
           validation = 'error'
           help = validationTexts.groupInvalid
         }
         break
       case 'email':
-        if (!isEmail(value)) {
+        if (!isEmail(processedValue)) {
           validation = 'error'
           help = validationTexts.emailInvalid
         }
@@ -141,15 +167,16 @@ export function processField(
     ((processedValue && processedValue.length > 0) ||
       (typeof value === 'object' && !Array.isArray(value)))
   ) {
-    console.log('pas d"erreur')
-
+    // console.log('pas d"erreur')
     validation = 'success'
     help = validationTexts.fieldValid
   }
 
+  // console.log(typeof processedValue)
+
   return {
     [name]: {
-      value: processedValue,
+      value: context ? getValues(context) : processedValue,
       validation,
       required,
       help,

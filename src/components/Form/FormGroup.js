@@ -1,8 +1,14 @@
-import React, { useEffect, useReducer, useCallback, useRef } from 'react'
+import React, {
+  useEffect,
+  useReducer,
+  useCallback,
+  useRef,
+  useContext,
+} from 'react'
 import PropTypes from 'prop-types'
 import withFormControl from './withFormControl'
 import styles from './Form.module.css'
-import Form from './Form'
+import Form, { FieldsContext } from './Form'
 import { newId, concatClasses } from '../../helpers'
 import DefaultButton from './DefaultButton'
 import { FiX } from 'react-icons/fi'
@@ -18,9 +24,11 @@ const reducer = (state, action) => {
       return state.filter((item) => item.id !== action.payload.id)
 
     case 'onchange':
+      console.log('onchange', action.payload)
+
       return state.map((item) => {
         if (item.id === action.payload.id) {
-          item[action.payload.target.name] = action.payload.target.value
+          item.value[action.payload.target.name] = action.payload.target.value
         }
         return item
       })
@@ -43,71 +51,101 @@ function FormGroup(props) {
     model,
     label,
     helptext,
+    fieldsData,
     ...restProps
   } = props
-  console.log('formgroup called', props)
 
   let isInitialised = useRef()
 
-  const [items, dispatch] = useReducer(reducer, initialState)
+  // const [items, dispatch] = useReducer(reducer, fieldsData[name])
+  console.log('formgroup called', fieldsData[name])
 
   const newItem = useCallback(() => {
-    console.log('newItem called')
     let item = {}
     let valueUndefined
+
     Object.values(fields).forEach((name) => {
-      item[name] = valueUndefined
+      item.value = {
+        ...item.value,
+        [name]: valueUndefined,
+        validation: null,
+        id: newId(),
+      }
     })
-    item.id = newId()
-    return { item }
+    // item.validation = null
+    // item.id = newId()
+
+    console.log('newItem called:', { item })
+    return item
   }, [fields])
 
-  const handleUpdate = (fieldsData) => {
-    console.log('handleUpdate called')
-    setValue(name, items, { model, fieldsData })
-  }
+  // const handleUpdate = (fieldsData) => {
+  //   console.log('handleUpdate', fieldsData)
+  //   setValue(name, items, { model, fieldsData })
+  // }
   // const handleUpdate = useCallback(
   //   (fieldsData) => {
   //     console.log('handleUpdate called')
-  //     setValue(name, items, { model, fieldsData })
+  //     setValue(name, items, { model })
+  //     // setValue(name, items, { model, fieldsData })
   //   },
   //   [items, model, name, setValue]
   // )
+  const handleUpdate = useCallback(
+    (context) => {
+      console.log('handleUpdate called', context)
+      // setValue(name, items, { model })
+      setValue(name, fieldsData[name], { model, context })
+    },
+    [fieldsData, model, name, setValue]
+  )
 
-  const handleDispatch = (e, action) => {
-    e.preventDefault()
-    dispatch(action)
-  }
+  // useEffect(() => {
+  //   handleUpdate()
+  // }, [handleUpdate])
+
+  // const handleDispatch = (e, action) => {
+  //   e.preventDefault()
+  //   dispatch(action)
+  // }
 
   // Add 1 item at the first render only
   useEffect(() => {
     const onInitialLoad = () => {
-      console.log('onInitialLoad called')
-      dispatch({
-        type: 'add',
-        payload: newItem(fields),
-      })
+      setValue(name, { ...fieldsData[name].value, ...newItem() }, { model })
       return true
     }
     if (!isInitialised.current) {
       isInitialised.current = onInitialLoad()
     }
-  }, [newItem, fields])
+  }, [newItem, fields, fieldsData, name, model, setValue])
+  // useEffect(() => {
+  //   const onInitialLoad = () => {
+  //     dispatch({
+  //       type: 'add',
+  //       payload: newItem(fields),
+  //     })
+  //     return true
+  //   }
+  //   if (!isInitialised.current) {
+  //     isInitialised.current = onInitialLoad()
+  //   }
+  // }, [newItem, fields])
 
   return (
     <div className={styles.formGroup}>
-      {items.map((item, index) => {
+      {/* {fieldsData[name].map((item, index) => {
         return (
           <Form
             fields={fields}
             {...restProps}
             key={item.id}
             component="fieldset"
-            className={concatClasses([styles.fieldset, css])}
+            className={concatClasses([styles.fieldset])}
             onChange={(e) => {
               handleDispatch(e, {
                 type: 'onchange',
-                payload: { id: item.id, target: e.target },
+                payload: { id: item.id, target: e.target, fieldsData },
               })
             }}
           >
@@ -137,17 +175,17 @@ function FormGroup(props) {
             {helptext && <span className={styles.help}>{helptext}</span>}
           </Form>
         )
-      })}
+      })} */}
       <Button
         css={`
           ${styles.btnAction} ${styles.btnAdd}
         `}
-        onClick={(e) =>
-          handleDispatch(e, {
-            type: 'add',
-            payload: newItem(fields),
-          })
-        }
+        // onClick={(e) =>
+        //   handleDispatch(e, {
+        //     type: 'add',
+        //     payload: newItem(fields),
+        //   })
+        // }
       >
         {moreLabel}
       </Button>
@@ -160,6 +198,7 @@ FormGroup.defaultProps = {
   moreLabel: 'Add',
   formComponent: Form,
   buttonComponent: DefaultButton,
+  fieldsData: {},
 }
 FormGroup.propTypes = {
   name: PropTypes.string.isRequired,
@@ -171,6 +210,7 @@ FormGroup.propTypes = {
   children: PropTypes.node.isRequired,
   buttonComponent: PropTypes.elementType,
   formComponent: PropTypes.elementType,
+  fieldsData: PropTypes.object,
 }
 
-export default withFormControl(FormGroup)
+export default withFormControl(React.memo(FormGroup))

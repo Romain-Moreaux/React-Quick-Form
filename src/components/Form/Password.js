@@ -38,7 +38,7 @@ function Password(props) {
       model,
       min,
     })
-    handleUpdate && handleUpdate(fieldsData, setValue)
+    // handleUpdate && handleUpdate(fieldsData, setValue)
   }
   // const handleSetValue = useCallback(
   //   (e) => {

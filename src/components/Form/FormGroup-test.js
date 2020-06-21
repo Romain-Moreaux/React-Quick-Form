@@ -1,16 +1,9 @@
-import React, {
-  useEffect,
-  useReducer,
-  useState,
-  useCallback,
-  useRef,
-} from 'react'
+import React, { useEffect, useReducer, useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
 import withFormControl from './withFormControl'
 import styles from './Form.module.css'
-import Form, { FormConsumer } from './Form'
-import { formIsInvalid } from './helpers'
-import { newId } from '../../helpers'
+import Form from './Form'
+import { newId, concatClasses } from '../../helpers'
 import DefaultButton from './DefaultButton'
 import { FiX } from 'react-icons/fi'
 
@@ -42,12 +35,14 @@ function FormGroup(props) {
     name,
     children,
     fields,
+    css,
     formComponent: Form,
     buttonComponent: Button,
     moreLabel,
-    // setValue,
+    setValue,
     model,
     label,
+    helptext,
     ...restProps
   } = props
   console.log('formgroup called', props)
@@ -67,94 +62,82 @@ function FormGroup(props) {
     return { item }
   }, [fields])
 
+  const handleUpdate = (fieldsData) => {
+    console.log('handleUpdate called')
+    setValue(name, items, { model, fieldsData })
+  }
+  // const handleUpdate = useCallback(
+  //   (fieldsData) => {
+  //     console.log('handleUpdate called')
+  //     setValue(name, items, { model, fieldsData })
+  //   },
+  //   [items, model, name, setValue]
+  // )
+
   const handleDispatch = (e, action) => {
     e.preventDefault()
     dispatch(action)
   }
 
   // Add 1 item at the first render only
-  // useEffect(() => {
-  //   const onInitialLoad = () => {
-  //     console.log('onInitialLoad called')
-  //     dispatch({
-  //       type: 'add',
-  //       payload: newItem(fields),
-  //     })
-  //     return true
-  //   }
-  //   if (!isInitialised.current) {
-  //     isInitialised.current = onInitialLoad()
-  //   }
-  // }, [newItem, fields])
-
-  const handleUpdate = useCallback(
-    (fieldsData, setValue) => {
-      console.log('handleUpdate called', fieldsData, setValue)
-      setValue(name, items, { model, fieldsData })
-    },
-    [items, model, name]
-  )
-
-  const GroupComponent = (props) => {
-    console.log('groupComponent', props)
-    const { item, index, ...restProps } = props
-    return (
-      <Form {...restProps}>
-        <legend className={styles.legend}>{label}</legend>
-        {/* {React.Children.map(children, (children) => {
-          return React.cloneElement(
-            children,
-            // { handleUpdate: (setValue) => handleUpdate(setValue) },
-            { handleUpdate },
-            { ...children }
-          )
-        })} */}
-        {children}
-        {index !== 0 ? (
-          <Button
-            css={`
-              ${styles.btnRemove} ${styles.btnAction}
-            `}
-            onClick={(e) =>
-              handleDispatch(e, {
-                type: 'delete',
-                payload: { id: item.id },
-              })
-            }
-          >
-            <FiX />
-          </Button>
-        ) : null}
-      </Form>
-    )
-  }
+  useEffect(() => {
+    const onInitialLoad = () => {
+      console.log('onInitialLoad called')
+      dispatch({
+        type: 'add',
+        payload: newItem(fields),
+      })
+      return true
+    }
+    if (!isInitialised.current) {
+      isInitialised.current = onInitialLoad()
+    }
+  }, [newItem, fields])
 
   return (
-    <>
-      <FormConsumer>
-        {() =>
-          items.map((item, index) => {
-            return (
-              <GroupComponent
-                required={true}
-                item={item}
-                index={index}
-                fields={fields}
-                {...restProps}
-                key={item.id}
-                isFormGroup
-                className={styles.formGroup}
-                onChange={(e) => {
+    <div className={styles.formGroup}>
+      {items.map((item, index) => {
+        return (
+          <Form
+            fields={fields}
+            {...restProps}
+            key={item.id}
+            component="fieldset"
+            className={concatClasses([styles.fieldset, css])}
+            onChange={(e) => {
+              handleDispatch(e, {
+                type: 'onchange',
+                payload: { id: item.id, target: e.target },
+              })
+            }}
+          >
+            <legend className={styles.legend}>{label}</legend>
+            {React.Children.map(children, (children) => {
+              return React.cloneElement(
+                children,
+                { handleUpdate },
+                { ...children }
+              )
+            })}
+            {index !== 0 ? (
+              <Button
+                css={`
+                  ${styles.btnRemove} ${styles.btnAction}
+                `}
+                onClick={(e) =>
                   handleDispatch(e, {
-                    type: 'onchange',
-                    payload: { id: item.id, target: e.target },
+                    type: 'delete',
+                    payload: { id: item.id },
                   })
-                }}
-              />
-            )
-          })
-        }
-      </FormConsumer>
+                }
+              >
+                <FiX />
+              </Button>
+            ) : null}
+            {helptext && <span className={styles.help}>{helptext}</span>}
+          </Form>
+        )
+      })}
       <Button
         css={`
           ${styles.btnAction} ${styles.btnAdd}
@@ -168,7 +151,7 @@ function FormGroup(props) {
       >
         {moreLabel}
       </Button>
-    </>
+    </div>
   )
 }
 
@@ -184,10 +167,10 @@ FormGroup.propTypes = {
   moreLabel: PropTypes.string,
   model: PropTypes.oneOf(['formGroup']),
   value: PropTypes.any,
-  // setValue: PropTypes.func.isRequired,
+  setValue: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
   buttonComponent: PropTypes.elementType,
   formComponent: PropTypes.elementType,
 }
 
-export default FormGroup
+export default withFormControl(FormGroup)

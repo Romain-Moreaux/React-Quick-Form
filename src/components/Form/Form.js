@@ -51,10 +51,13 @@ function Form(props) {
     children,
     ...rest
   } = props
-  // console.log('form called', props)
 
-  const requiredFields = allRequired ? fields : required
+  // if allRequired then extract values from arrays inside fields, and return a formated array of values
+  const requiredFields = allRequired
+    ? fields.map((field) => (Array.isArray(field) ? field[0] : field))
+    : required
 
+  console.log('requiredFields', requiredFields)
   const [fieldsData, setFieldsData] = useState(() => {
     return forcedValidation
       ? initiateFormFields(fields)

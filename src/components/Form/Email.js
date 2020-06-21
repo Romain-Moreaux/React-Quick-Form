@@ -5,6 +5,7 @@ import styles from './Form.module.css'
 import { FiMail } from 'react-icons/fi'
 import DefaultInput from './DefaultInput'
 import { FieldsContext } from './Form'
+import usePrevious from '../../hooks/usePrevious'
 
 function Email(props) {
   const {
@@ -18,7 +19,8 @@ function Email(props) {
   } = props
 
   // console.log('email called', props)
-  let isInitialised = useRef()
+  // let isInitialised = useRef()
+  const prevValue = usePrevious(value)
   const fieldsData = useContext(FieldsContext)
 
   // const handleSetValue = useCallback(
@@ -34,20 +36,21 @@ function Email(props) {
   // )
 
   const handleSetValue = (e) => {
-    console.log('handle setValue', e.target)
     const { name, value } = e.target
     e.preventDefault()
     setValue(name, value, { model })
-    handleUpdate && handleUpdate(fieldsData, setValue)
   }
 
-  // useEffect(() => {
-  //   if (isInitialised.current) {
-  //     console.log('useEffect Called Email')
-  //     handleUpdate && handleUpdate(fieldsData, setValue)
-  //   }
-  //   isInitialised.current = true
-  // }, [fieldsData, handleUpdate, setValue])
+  const updateFromChild = useCallback(() => {
+    if (handleUpdate && value !== prevValue) {
+      console.log('Update from child')
+      handleUpdate(fieldsData)
+    }
+  }, [fieldsData, value, handleUpdate, prevValue])
+
+  useEffect(() => {
+    updateFromChild()
+  }, [updateFromChild])
 
   return (
     <div className={styles.field}>
