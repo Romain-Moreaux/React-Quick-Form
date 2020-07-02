@@ -38,7 +38,7 @@ const LogInForm = ({ className }) => {
 
   return (
     <Form
-      fields={['enfants']}
+      fields={['enfants', 'email2', 'password2']}
       allRequired
       customValidationTexts={{
         formInvalid: 'Le formulaire comporte des erreurs',
@@ -55,6 +55,7 @@ const LogInForm = ({ className }) => {
         name="enfants"
         label="enfant"
         moreLabel="Ajouter un enfant"
+        isFormGroup
       >
         <Email name="email" label="email" help="Veuillez saisir un email" />
         <Password
@@ -63,6 +64,12 @@ const LogInForm = ({ className }) => {
           help="Veuillez saisir un password"
         />
       </FormGroup>
+      <Email name="email2" label="email2" help="Veuillez saisir un email" />
+      <Password
+        name="password2"
+        label="password2"
+        help="Veuillez saisir un password"
+      />
       <FormActions>
         <FormButton
           callback={(fields) => handleSubmit(fields)}

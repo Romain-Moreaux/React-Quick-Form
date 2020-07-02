@@ -5,7 +5,7 @@ import styles from './Form.module.css'
 import { concatClasses } from '../../helpers'
 import { Link } from 'react-router-dom'
 
-const withFormControl = (InputComponent) => {
+const withFormControl = (WrappedComponent) => {
   /*  Add structure and logical control to the input component */
   const FormControl = (props) => {
     const {
@@ -16,8 +16,10 @@ const withFormControl = (InputComponent) => {
       help,
       field,
       addLink,
+      isFormGroup,
       ...otherProps
     } = props
+    console.log(props)
 
     /* Get past contexts as parameters and return a React element */
     function controlledChild({ fieldsData, setValue }) {
@@ -48,8 +50,15 @@ const withFormControl = (InputComponent) => {
         ...otherProps,
       }
 
-      return (
-        <div className={concatClasses([styles.group, styles[validation]])}>
+      const groupProps = {
+        name,
+        label,
+        setValue,
+        ...otherProps,
+      }
+
+      return !isFormGroup ? (
+        <div className={concatClasses([styles.control, styles[validation]])}>
           {!props.fields && label ? (
             <label className={styles.label} htmlFor={name}>
               {label}
@@ -60,10 +69,14 @@ const withFormControl = (InputComponent) => {
               {addLink.label}
             </Link>
           )}
-          <InputComponent {...inputProps} />
+          <WrappedComponent {...inputProps} />
           {(fieldsDataHelp || help) && (
             <span className={styles.help}>{fieldsDataHelp || help}</span>
           )}
+        </div>
+      ) : (
+        <div className={styles.control}>
+          <WrappedComponent {...groupProps} />
         </div>
       )
     }

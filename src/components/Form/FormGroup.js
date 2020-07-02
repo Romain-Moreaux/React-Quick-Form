@@ -98,7 +98,7 @@ function FormGroup(props) {
             {...restProps}
             key={item.id}
             isFormGroup
-            className={styles.formGroup}
+            className={styles.group}
             onChange={(e) => {
               handleDispatch(e, {
                 type: 'onchange',
@@ -150,7 +150,7 @@ function FormGroup(props) {
 }
 
 FormGroup.defaultProps = {
-  model: 'formGroup',
+  model: 'group',
   moreLabel: 'Add',
   formComponent: Form,
   buttonComponent: DefaultButton,
@@ -159,7 +159,7 @@ FormGroup.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   moreLabel: PropTypes.string,
-  model: PropTypes.oneOf(['formGroup']),
+  model: PropTypes.oneOf(['group']),
   value: PropTypes.any,
   setValue: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,

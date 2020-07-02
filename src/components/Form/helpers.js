@@ -65,16 +65,16 @@ export function processField(
     }
     // Each case has a validation rule
     switch (model) {
-      // case 'formGroup':
-      //   console.log('case formGroup')
-      //   return {
-      //     [name]: {
-      //       value: processedValue,
-      //       validation: null,
-      //       required,
-      //       help: null,
-      //     },
-      //   }
+      case 'group':
+        console.log('case group')
+        return {
+          [name]: {
+            value: processedValue,
+            validation: null,
+            required,
+            help: null,
+          },
+        }
       case 'email':
         if (!isEmail(value)) {
           validation = 'error'
