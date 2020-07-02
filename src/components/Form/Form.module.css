@@ -11,12 +11,12 @@ button {
   background-color: transparent;
 }
 
-.formGroup,
-.group {
+.group,
+.control {
   margin-bottom: 2.2rem;
 }
 
-.group,
+.control,
 .field {
   display: flex;
   flex-direction: column;
@@ -26,14 +26,14 @@ button {
   background-color: #ffffff;
 }
 
-.formGroup {
+.group {
   border: 1px solid grayLight;
   border-radius: 8px;
   padding: 1.4rem 1rem;
   position: relative;
 }
 
-.formGroup > .group {
+.group > .control {
   margin: 0;
   padding: 0 1rem;
 }
@@ -191,9 +191,9 @@ input::-webkit-calendar-picker-indicator {
   max-width: fit-content;
   margin-left: auto;
   font-size: textSm;
-  position: absolute;
+  /* position: absolute;
   bottom: -0.6rem;
-  right: 0;
+  right: 0; */
 }
 
 .help {
@@ -235,7 +235,7 @@ input::-webkit-calendar-picker-indicator {
 .disabled .help {
   display: none;
 }
-.group.disabled {
+.control.disabled {
   opacity: 0.5;
 }
 .btnPrimary.disabled {
