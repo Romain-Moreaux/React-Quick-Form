@@ -28,10 +28,10 @@ export function processField(
     customValidationFunction,
     fieldConfirm,
   } = options
-  // console.log('processField', name, value, options)
+  console.log('processField', name, value, options)
 
   // If the value is an array, remove its empty values for safety.
-  const processedValue = Array.isArray(value)
+  let processedValue = Array.isArray(value)
     ? value.filter(
         (item) =>
           Number.isInteger(item) || item instanceof Object || item.length
@@ -40,8 +40,7 @@ export function processField(
 
   let validation = null,
     passwordStrength = null,
-    help = null,
-    groupValue = null
+    help = null
 
   // VALIDATION - If any check will fail, raise error state and set help message.
   if (required && (!processedValue || processedValue.length === 0)) {
@@ -69,8 +68,16 @@ export function processField(
     switch (model) {
       case 'group':
         console.log('case group', name, processedValue)
-        validation = processedValue.validation
-        groupValue = processedValue.value
+        processedValue = processedValue.map((item) => {
+          if (item.validation === null) {
+            validation = null
+          } else if (item.validation === 'error') {
+            validation = 'error'
+          }
+          return item.value
+        })
+        console.log('validation', validation)
+
         break
       case 'email':
         if (!isEmail(value)) {
@@ -146,7 +153,7 @@ export function processField(
 
   return {
     [name]: {
-      value: groupValue || processedValue,
+      value: processedValue,
       validation,
       required,
       help,
