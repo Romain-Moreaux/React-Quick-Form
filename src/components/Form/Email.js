@@ -26,7 +26,8 @@ function Email(props) {
     const { name, value } = e.target
     e.preventDefault()
     setValue(name, value, { model })
-    handleDispatch &&
+    if (handleDispatch) {
+      console.log('dispatch from child', context)
       handleDispatch(e, {
         type: 'onchange',
         payload: {
@@ -35,6 +36,7 @@ function Email(props) {
           context,
         },
       })
+    }
   }
 
   return (
