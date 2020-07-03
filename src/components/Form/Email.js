@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { withFormControl } from '.'
 import PropTypes from 'prop-types'
 import styles from './Form.module.css'
 import { FiMail } from 'react-icons/fi'
 import DefaultInput from './DefaultInput'
-// import { FieldsContext } from './Form'
+import { FieldsContext } from './Form'
 
 function Email(props) {
   const {
@@ -14,18 +14,27 @@ function Email(props) {
     model,
     setValue,
     component: Component,
-    // handleValidation,
+    handleDispatch,
+    item,
   } = props
 
   // console.log('email called', props)
 
-  // const context = useContext(FieldsContext)
+  const context = useContext(FieldsContext)
 
   const handleSetValue = (e) => {
     const { name, value } = e.target
     e.preventDefault()
     setValue(name, value, { model })
-    // handleValidation && handleValidation(context)
+    handleDispatch &&
+      handleDispatch(e, {
+        type: 'onchange',
+        payload: {
+          id: item.id,
+          target: e.target,
+          context,
+        },
+      })
   }
 
   return (

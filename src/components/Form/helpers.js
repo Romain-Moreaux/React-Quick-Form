@@ -28,6 +28,7 @@ export function processField(
     customValidationFunction,
     fieldConfirm,
   } = options
+  // console.log('processField', name, value, options)
 
   // If the value is an array, remove its empty values for safety.
   const processedValue = Array.isArray(value)
@@ -39,7 +40,8 @@ export function processField(
 
   let validation = null,
     passwordStrength = null,
-    help = null
+    help = null,
+    groupValue = null
 
   // VALIDATION - If any check will fail, raise error state and set help message.
   if (required && (!processedValue || processedValue.length === 0)) {
@@ -66,15 +68,10 @@ export function processField(
     // Each case has a validation rule
     switch (model) {
       case 'group':
-        console.log('case group')
-        return {
-          [name]: {
-            value: processedValue,
-            validation: null,
-            required,
-            help: null,
-          },
-        }
+        console.log('case group', name, processedValue)
+        validation = processedValue.validation
+        groupValue = processedValue.value
+        break
       case 'email':
         if (!isEmail(value)) {
           validation = 'error'
@@ -142,13 +139,14 @@ export function processField(
     ((processedValue && processedValue.length > 0) ||
       (typeof value === 'object' && !Array.isArray(value)))
   ) {
+    // console.log('Validation sucess')
     validation = 'success'
     help = validationTexts.fieldValid
   }
 
   return {
     [name]: {
-      value: processedValue,
+      value: groupValue || processedValue,
       validation,
       required,
       help,
@@ -201,11 +199,11 @@ export function formIsInvalid(fieldsData, fieldKeys = []) {
           !Array.isArray(value) &&
           (value === null || !Object.keys(value).length)))
     ) {
-      console.log('required but empty')
+      // console.log('required but empty')
       requiredButEmpty = true
     }
     if (validation === 'error') {
-      console.log('has any error')
+      // console.log('has any error')
       hasAnyError = true
     }
   })

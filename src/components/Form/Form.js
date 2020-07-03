@@ -76,7 +76,7 @@ function Form(props) {
 
   const setValue = useCallback(
     (name, value, options) => {
-      console.log('setValue called:', name, value, options)
+      // console.log('setValue called:', name, value, options)
       if (!name) {
         // If no param reset whole form
         setFieldsData(() =>
