@@ -19,7 +19,7 @@ const withFormControl = (WrappedComponent) => {
       isFormGroup,
       ...otherProps
     } = props
-    console.log(props)
+    // console.log('FormControl', props)
 
     /* Get past contexts as parameters and return a React element */
     function controlledChild({ fieldsData, setValue }) {

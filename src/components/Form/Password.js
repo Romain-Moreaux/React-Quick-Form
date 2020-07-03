@@ -19,10 +19,11 @@ function Password(props) {
     setValue,
     toggler,
     passwordStrength,
-    handleValidation,
+    handleDispatch,
+    item,
   } = props
-  // console.log('password called')
 
+  // console.log('password called')
   const context = useContext(FieldsContext)
 
   const [isShow, setIsShow] = useState(!toggler)
@@ -33,7 +34,17 @@ function Password(props) {
       model,
       min,
     })
-    handleValidation && handleValidation(context)
+    if (handleDispatch) {
+      console.log('dispatch from child', context)
+      handleDispatch(e, {
+        type: 'onchange',
+        payload: {
+          id: item.id,
+          target: e.target,
+          context,
+        },
+      })
+    }
   }
 
   let textColor =
