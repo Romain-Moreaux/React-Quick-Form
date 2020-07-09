@@ -23,7 +23,7 @@ function Password(props) {
     item,
   } = props
 
-  console.log('password called')
+  // console.log('password called')
   const context = useContext(FieldsContext)
 
   const [isShow, setIsShow] = useState(!toggler)
