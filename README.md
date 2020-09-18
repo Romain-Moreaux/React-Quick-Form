@@ -5,9 +5,10 @@ _project in progress, the first version is coming soon_
 
 - Deploy your forms over a friendly API in few minutes.
 - Theme fully customisable based on Google Material UI.
+- UX design with notifications system and form controls.
 - Specific components meeting needs to ease frontend integration.
-- It uses the React Context API to manage state , form validation and return a well formatted data for your backend.
-- You can add your own middleware with functions callbacks.
+- It uses the React Context API to manage state and form validation to return a well formatted data for your backend.
+- You can add your own functions callbacks to extend fonctionalities.
 
 ## Docs
 
