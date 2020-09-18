@@ -51,7 +51,7 @@ function Form(props) {
     children,
     ...rest
   } = props
-  // console.log('form called', props)
+  console.log('form called', props)
 
   const requiredFields = allRequired ? fields : required
 
