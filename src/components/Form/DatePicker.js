@@ -30,6 +30,7 @@ const DatePicker = (props) => {
 DatePicker.defaultProps = {
   model: 'date',
   component: DefaultInput,
+  min: new Date().toISOString().split('T')[0],
 }
 
 DatePicker.propTypes = {

@@ -65,9 +65,6 @@ const RegisterForm = ({ className }) => {
         name="birthdate"
         label="birthdate"
         help="Please select a date"
-        field="birthdate"
-        min="2015-01-01"
-        max="2017-01-01"
       />
       <Select
         name="course"

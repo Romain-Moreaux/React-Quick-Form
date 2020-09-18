@@ -18,14 +18,14 @@ function Myforms() {
           <LogInForm className="login-form" />
         </div>
       </div>
-      <div className="container container-sm">
+      {/* <div className="container container-sm">
         <div className="row">
           <header className="content-header sign-in-header">
             <h2 className="header-heading">Register Form</h2>
           </header>
           <RegisterForm className="register-form" />
         </div>
-      </div>
+      </div> */}
     </>
   )
 }
