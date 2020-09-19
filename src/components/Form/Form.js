@@ -51,7 +51,7 @@ function Form(props) {
     children,
     ...rest
   } = props
-  console.log('form called', props)
+  // console.log('<Form />', props)
 
   const requiredFields = allRequired ? fields : required
 
@@ -76,7 +76,7 @@ function Form(props) {
 
   const setValue = useCallback(
     (name, value, options) => {
-      // console.log('setValue called:', name, value, options)
+      // console.log('setValue()', name, value, options)
       if (!name) {
         // If no param reset whole form
         setFieldsData(() =>

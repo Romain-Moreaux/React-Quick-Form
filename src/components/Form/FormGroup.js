@@ -1,27 +1,27 @@
-import React, { useEffect, useReducer, useCallback } from 'react'
+import React, { useEffect, useReducer, useCallback, useContext } from 'react'
 import PropTypes from 'prop-types'
 import withFormControl from './withFormControl'
 import styles from './Form.module.css'
-import Form from './Form'
+import Form, { FieldsContext } from './Form'
 // import { formIsInvalid } from './helpers'
 import { newId } from '../../helpers'
 import DefaultButton from './DefaultButton'
 import { FiX } from 'react-icons/fi'
 import { formIsInvalid } from './helpers'
 
-const initialState = []
-
 const reducer = (state, action) => {
+  console.log('reducer', state)
   switch (action.type) {
     case 'add':
-      console.log('add =>', action.payload.item)
+      console.log('dispatch add()', action.payload)
       return [...state, action.payload.item]
 
     case 'delete':
-      console.log('delete =>', action.payload.id)
+      console.log('dispatch delete()', action.payload.id)
       return state.filter((item) => item.id !== action.payload.id)
 
     case 'onchange':
+      console.log('dispatch onchange()', state, action.payload)
       return state.map((item) => {
         if (item.id === action.payload.id) {
           item.value[action.payload.target.name] = action.payload.target.value
@@ -29,7 +29,6 @@ const reducer = (state, action) => {
             ? 'error'
             : 'success'
         }
-        console.log('onChange =>', item)
         return item
       })
 
@@ -37,6 +36,9 @@ const reducer = (state, action) => {
       return state
   }
 }
+
+// pb validation du formulaire a la creation d'un nouvel item, ce qui passe le state validation en 'success'.
+// Les states  remontees sont bonnes et la structure aussi, le pb doit venir d'un composant fils.
 
 function FormGroup(props) {
   const {
@@ -51,12 +53,10 @@ function FormGroup(props) {
     label,
     ...restProps
   } = props
-  // console.log('formgroup called', props)
+  // console.log('<Formgroup />', props)
+  const context = useContext(FieldsContext)
 
-  const [items, dispatch] = useReducer(reducer, initialState)
-  // const [formIsValid, setFormIsValid] = useState()
-
-  const newItem = useCallback(() => {
+  const newItem = () => {
     // console.log('newItem called')
     let item = {}
     let valueUndefined
@@ -65,47 +65,25 @@ function FormGroup(props) {
     })
     item.validation = null
     item.id = newId()
-    return { item }
-  }, [fields])
+    return item
+  }
 
-  // const onUpdate = useCallback(
-  //   (context) => {
-  //     console.log('onUpdate called')
-  //     setValue(name, items, { model, context })
-  //   },
-  //   [items, model, name, setValue]
-  // )
+  // third argument is the lazy state, it return an array of 1 object
+  const [items, dispatch] = useReducer(reducer, null, () => [newItem()])
 
   const handleDispatch = (e, action) => {
     e.preventDefault()
     dispatch(action)
   }
 
-  // const handleValidation = (fields) => {
-  //   console.log('handleValidation')
-
-  //   setFormIsValid(!formIsInvalid(fields))
-  // }
-
   useEffect(() => {
-    const onInitialLoad = () => {
-      console.log('onInitialLoad called')
-      dispatch({
-        type: 'add',
-        payload: newItem(fields),
-      })
-    }
-    onInitialLoad()
-  }, [newItem, fields])
-
-  useEffect(() => {
-    console.log('items changed', items)
+    console.log('items changed')
     setValue(name, items, { model })
-  }, [name, items, model, setValue])
+  }, [items])
 
   return (
     <>
-      {items.map((item, index) => {
+      {items?.map((item, index) => {
         return (
           <Form
             fields={fields}
@@ -114,10 +92,20 @@ function FormGroup(props) {
             isFormGroup
             className={styles.group}
             // onChange={(e) => {
-            //   handleDispatch(e, {
-            //     type: 'onchange',
-            //     payload: { id: item.id, target: e.target },
-            //   })
+            //   console.log(' <Group /> changed', items)
+            //   // setValue(
+            //   //   name,
+            //   //   handleDispatch(e, {
+            //   //     type: 'onchange',
+            //   //     payload: {
+            //   //       id: item.id,
+            //   //       target: e.target,
+            //   //       context,
+            //   //     },
+            //   //   }),
+            //   //   { model }
+            //   // )
+            //   // setValue(name, items, { model })
             // }}
           >
             <legend className={styles.legend}>{label}</legend>
@@ -128,7 +116,7 @@ function FormGroup(props) {
                 { ...children }
               )
             })}
-            {index !== 0 ? (
+            {index !== 0 && (
               <Button
                 css={`
                   ${styles.btnRemove} ${styles.btnAction}
@@ -142,7 +130,7 @@ function FormGroup(props) {
               >
                 <FiX />
               </Button>
-            ) : null}
+            )}
           </Form>
         )
       })}
@@ -153,7 +141,7 @@ function FormGroup(props) {
         onClick={(e) =>
           handleDispatch(e, {
             type: 'add',
-            payload: newItem(fields),
+            payload: { item: newItem(fields) },
           })
         }
       >

@@ -67,8 +67,9 @@ export function processField(
     // Each case has a validation rule
     switch (model) {
       case 'group':
-        console.log('case group', name, processedValue)
+        // console.log('case group', name, processedValue)
         processedValue = processedValue.map((item) => {
+          console.log('item.validation', item.validation)
           if (item.validation === null) {
             validation = null
           } else if (item.validation === 'error') {
@@ -146,7 +147,7 @@ export function processField(
     ((processedValue && processedValue.length > 0) ||
       (typeof value === 'object' && !Array.isArray(value)))
   ) {
-    // console.log('Validation sucess')
+    console.log('Validation sucess')
     validation = 'success'
     help = validationTexts.fieldValid
   }
@@ -190,6 +191,7 @@ export function updateFieldsRequirements(fieldsData, required) {
  * Check whether whole form is filled correctly.
  */
 export function formIsInvalid(fieldsData, fieldKeys = []) {
+  console.log('formIsInvalid()', fieldsData, fieldKeys)
   // Check only fields of given keys, otherwise check whole form.
   const fieldsToCheck = fieldKeys.length ? fieldKeys : Object.keys(fieldsData)
   let requiredButEmpty = false

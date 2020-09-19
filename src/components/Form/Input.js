@@ -2,11 +2,11 @@ import React, { useContext } from 'react'
 import { withFormControl } from '.'
 import PropTypes from 'prop-types'
 import styles from './Form.module.css'
-import { FiMail } from 'react-icons/fi'
+import { FiFileText } from 'react-icons/fi'
 import DefaultInput from './DefaultInput'
 import { FieldsContext } from './Form'
 
-function Email(props) {
+function Input(props) {
   const {
     name,
     value,
@@ -18,7 +18,7 @@ function Email(props) {
     item,
   } = props
 
-  // console.log('<email />', props)
+  // console.log('<Input />', props)
 
   const context = useContext(FieldsContext)
 
@@ -43,28 +43,28 @@ function Email(props) {
     <div className={styles.field}>
       <Component
         name={name}
-        type="email"
+        type="text"
         placeholder={placeholder}
         handleSetValue={handleSetValue}
         value={value}
       />
-      <span className={styles.fieldIcon}>{<FiMail />}</span>
+      <span className={styles.fieldIcon}>{<FiFileText />}</span>
     </div>
   )
 }
 
-Email.defaultProps = {
-  model: 'email',
-  placeholder: 'name@example.com',
+Input.defaultProps = {
+  model: 'text',
+  placeholder: 'Write a text...',
   component: DefaultInput,
 }
 
-Email.propTypes = {
+Input.propTypes = {
   name: PropTypes.string.isRequired,
-  model: PropTypes.oneOf(['email']),
+  model: PropTypes.oneOf(['text']),
   value: PropTypes.any,
   placeholder: PropTypes.node,
   setValue: PropTypes.func.isRequired,
 }
 
-export default withFormControl(React.memo(Email))
+export default withFormControl(React.memo(Input))
