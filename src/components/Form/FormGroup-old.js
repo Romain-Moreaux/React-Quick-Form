@@ -1,23 +1,33 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer, useContext } from 'react'
 import PropTypes from 'prop-types'
+import withFormControl from './withFormControl'
 import styles from './Form.module.css'
-import Form from './Form'
+import Form, { FieldsContext } from './Form'
+// import { formIsInvalid } from './helpers'
+import { newId } from '../../helpers'
+import DefaultButton from './DefaultButton'
+import { FiX } from 'react-icons/fi'
 import { formIsInvalid } from './helpers'
-import { FormConsumer } from '.'
 
-const initialState = []
 const reducer = (state, action) => {
+  console.log('reducer', state)
   switch (action.type) {
     case 'add':
+      console.log('dispatch add()', action.payload)
       return [...state, action.payload.item]
 
     case 'delete':
-      return state.filter((item) => item.id !== action.payload.id)
+      console.log('dispatch delete()', action)
+      return state.filter((item, index) => index !== action.payload.id)
 
     case 'onchange':
+      console.log('dispatch onchange()', state, action.payload)
       return state.map((item) => {
         if (item.id === action.payload.id) {
-          item[action.payload.target.name] = action.payload.target.value
+          item.value[action.payload.target.name] = action.payload.target.value
+          item.validation = formIsInvalid(action.payload.context)
+            ? 'error'
+            : 'success'
         }
         return item
       })
@@ -27,125 +37,147 @@ const reducer = (state, action) => {
   }
 }
 
+// pb validation du formulaire a la creation d'un nouvel item, ce qui passe le state validation en 'success'.
+// Les states  remontees sont bonnes et la structure aussi, le pb doit venir d'un composant fils.
+
 function FormGroup(props) {
   const {
     name,
     children,
     fields,
-    component: Component,
+    formComponent: Form,
+    buttonComponent: Button,
+    moreLabel,
     setValue,
     model,
-    groupLabel,
+    label,
+    ...restProps
   } = props
-  // console.log('FormGroup called', props)
+  console.log('<Formgroup />', props)
 
-  const [items, dispatch] = useReducer(reducer, initialState)
-  const [formIsValid, setFormIsValid] = useState()
-
-  const createItem = () => {
-    let item = {}
-    Object.values(fields).forEach((name) => {
-      item[name] = undefined
+  // const newItem = () => {
+  //   let item = {}
+  //   let valueUndefined
+  //   Object.values(fields).forEach((name) => {
+  //     item.value = { ...item.value, [name]: valueUndefined }
+  //   })
+  //   item.validation = null
+  //   item.id = newId()
+  //   console.log('newItem called', item)
+  //   return item
+  // }
+  const newItem = () => {
+    let valueUndefined
+    return Object.values(fields).map((name) => {
+      return {
+        [name]: valueUndefined,
+        validation: null,
+        help: null,
+        id: newId(),
+      }
     })
-    item.id = generateItemId()
-    return item
   }
 
-  useEffect(() => {
-    const runOnInitialLoad = () => {
-      // console.log('runOnInitialLoad')
-      dispatch({
-        type: 'add',
-        payload: { item: createItem(fields) },
-      })
-    }
-    runOnInitialLoad()
-  }, [])
-
-  function generateItemId() {
-    return (Math.random().toString(36) + Date.now().toString(36)).substr(2, 10)
-  }
+  // third argument is the lazy state, it return an array of 1 object
+  const [items, dispatch] = useReducer(reducer, null, () => [newItem()])
 
   const handleDispatch = (e, action) => {
     e.preventDefault()
     dispatch(action)
   }
 
-  const handleValidation = (fields) => {
-    setFormIsValid(!formIsInvalid(fields))
-  }
+  // useEffect(() => {
+  //   console.log('items changed')
+  //   setValue(name, items, { model })
+  // }, [items])
 
-  const testGRoup = ({ fieldsData, setValue }) => {
-    console.log('testGRoup', fieldsData, setValue)
-
-    return (
-      <div>
-        {items.map((item) => {
-          return (
-            <Component
-              fields={fields}
-              key={item.id}
-              isFormGroup
-              className={styles.formGroup}
-              onChange={(e) => {
-                handleDispatch(e, {
-                  type: 'onchange',
-                  payload: { id: item.id, target: e.target },
-                })
-                setValue(name, items, { model })
-              }}
-            >
-              <legend className={styles.legend}>{groupLabel}</legend>
-
-              {/* {children} */}
-              {React.Children.map(children, (children, index) => {
-                return React.cloneElement(
-                  children,
-                  { handleValidation },
-                  { ...children }
-                )
-              })}
-              <button
+  return (
+    <>
+      {items?.map((item, index) => {
+        return (
+          <Form
+            fields={fields}
+            {...restProps}
+            key={item.id}
+            isFormGroup
+            className={styles.group}
+            // onChange={(e) => {
+            //   console.log(' <Group /> changed', items)
+            //   // setValue(
+            //   //   name,
+            //   //   handleDispatch(e, {
+            //   //     type: 'onchange',
+            //   //     payload: {
+            //   //       id: item.id,
+            //   //       target: e.target,
+            //   //       context,
+            //   //     },
+            //   //   }),
+            //   //   { model }
+            //   // )
+            //   // setValue(name, items, { model })
+            // }}
+          >
+            <legend className={styles.legend}>{label}</legend>
+            {React.Children.map(children, (children) => {
+              return React.cloneElement(
+                children,
+                { handleDispatch, item },
+                { ...children }
+              )
+            })}
+            {index !== 0 && (
+              <Button
+                css={`
+                  ${styles.btnRemove} ${styles.btnAction}
+                `}
                 onClick={(e) =>
                   handleDispatch(e, {
                     type: 'delete',
-                    payload: { id: item.id },
+                    payload: { id: index },
                   })
                 }
               >
-                Delete
-              </button>
-            </Component>
-          )
-        })}
-        <button
-          onClick={(e) =>
-            handleDispatch(e, {
-              type: 'add',
-              payload: { item: createItem(fields) },
-            })
-          }
-        >
-          Add
-        </button>
-      </div>
-    )
-  }
-
-  console.log('formIsValid', formIsValid)
-  return <FormConsumer>{testGRoup}</FormConsumer>
+                <FiX />
+              </Button>
+            )}
+          </Form>
+        )
+      })}
+      <Button
+        css={`
+          ${styles.btnAction} ${styles.btnAdd}
+        `}
+        onClick={(e) =>
+          handleDispatch(e, {
+            type: 'add',
+            payload: { item: newItem(fields) },
+          })
+        }
+      >
+        {moreLabel}
+      </Button>
+    </>
+  )
 }
 
 FormGroup.defaultProps = {
-  model: 'formGroup',
-  component: Form,
+  model: 'group',
+  moreLabel: 'Add',
+  formComponent: Form,
+  buttonComponent: DefaultButton,
 }
 FormGroup.propTypes = {
   name: PropTypes.string.isRequired,
-  model: PropTypes.oneOf(['formGroup']),
+  label: PropTypes.string,
+  moreLabel: PropTypes.string,
+  model: PropTypes.oneOf(['group']),
   value: PropTypes.any,
   setValue: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+  buttonComponent: PropTypes.elementType,
+  formComponent: PropTypes.elementType,
 }
 
-// export default withFormControl(FormGroup)
-export default FormGroup
+export default withFormControl(FormGroup)
+// export default FormGroup
