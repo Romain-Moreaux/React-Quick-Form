@@ -47,7 +47,7 @@ const EventForm = ({ className }) => {
         name="event"
         label="event"
         moreLabel="Ajouter un enfant"
-        isFormGroup
+        // isFormGroup
       >
         <Email name="email" label="email" help="Veuillez saisir un email" />
         <Input
