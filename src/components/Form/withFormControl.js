@@ -76,8 +76,6 @@ const withFormControl = (WrappedComponent) => {
         </div>
       ) : (
         <WrappedComponent {...groupProps} />
-        // <div className={styles.control}>
-        // </div>
       )
     }
 
