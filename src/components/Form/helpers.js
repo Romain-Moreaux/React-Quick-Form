@@ -1,4 +1,5 @@
 export function initiateFormFields(fieldNames = [], required = []) {
+  // console.log('initiateFormFields()', arguments)
   let valueUndefined
   return fieldNames.reduce(
     (acc, field) => ({
