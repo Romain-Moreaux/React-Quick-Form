@@ -1,7 +1,7 @@
 _project in progress, the first version is coming soon  
 last update 18-09-20_
 
-# FillyForm
+# React Quick Form
 
 - Deploy your forms over a friendly API in few minutes.
 - Theme fully customisable based on Google Material UI.
